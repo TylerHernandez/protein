@@ -13,9 +13,13 @@ import UIKit
  
  */
 
+struct DefaultsKeys {
+    static let key = "this_is_my_key"
+}
+
 class ViewController: UIViewController {
     
-    var listOfEntries = [1,2,3,4]
+    var listOfEntries: [Int] = []
     var totalSum = 0
     
     var viewContainer: UIView = UIView()
@@ -28,9 +32,12 @@ class ViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         
+        loadListFromStorage()
+        
         viewContainer = refreshViewContainer()
         
         view.addSubview(viewContainer)
+        
         
       }
     
@@ -95,20 +102,10 @@ class ViewController: UIViewController {
         textOutlet.addTarget(self, action: #selector(submitNewEntry), for: .editingDidEndOnExit)
         newView.addSubview(textOutlet)
         
-        // submit button -> on submit calls addEntry()
-        // Create submit button.
-//        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 50, height: 50))
-//        button.backgroundColor = .systemRed
-//        button.setTitle("+", for: .normal)
-//        button.addTarget(self, action: #selector(submitNewEntry), for: .touchUpInside)
-        
-//        newView.addSubview(button)
-        
         return newView
     }
 
     @objc func buttonAction(sender: UIButton!) {
-        print("Add entry")
         
         entryView = addEntryView()
         
@@ -119,12 +116,14 @@ class ViewController: UIViewController {
     
     @objc func clearList(sender: UIButton!) {
         listOfEntries = [] // clear list
+        
         totalSum = 0
+        
+        saveListToStorage()
         
         viewContainer.removeFromSuperview()
         
         viewDidLoad()
-        
     }
     
     @objc func submitNewEntry(sender: UITextField!) {
@@ -133,14 +132,51 @@ class ViewController: UIViewController {
         }
         totalSum = 0
         
+        saveListToStorage()
         
         entryView.removeFromSuperview()
-        //viewContainer.removeFromSuperview()
         
         viewDidLoad()
         
     }
-            
     
+    // [15, 25, 30, 40] -> "15+25+30+40"
+    func toStorage(list: [Int]) -> String{
+        var str = ""
+        for item in list{
+            str += (String(item) + "+")
+        }
+        
+        return str
+    }
+    
+    func toList(json: String) -> [Int]{
+        var newList: [Int] = []
+        
+        for item in json.components(separatedBy: ["+"]){
+            if let itemInt = Int(item) {newList.append(itemInt)} else { return newList }
+        }
+        
+        return newList
+    }
+    
+    
+    func saveListToStorage(){
+        
+        let defaults = UserDefaults.standard
+        
+        let storedList = toStorage(list: listOfEntries)
+        defaults.set(storedList, forKey: DefaultsKeys.key)
+    }
+    
+    func loadListFromStorage(){
+        
+        let defaults = UserDefaults.standard
+        
+        if let storedList = defaults.string(forKey: DefaultsKeys.key) {
+            listOfEntries = toList(json: storedList)
+        }
+    }
+
 
 }
