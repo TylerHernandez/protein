@@ -41,6 +41,14 @@ class ViewController: UIViewController {
         
       }
     
+    // Prevents app from trying to display window horizontally
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        get {
+            return .portrait
+
+        }
+    }
+    
     func refreshViewContainer() -> UIView{
         let newView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
         // Create Add Entry button.
