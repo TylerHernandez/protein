@@ -50,31 +50,30 @@ class ViewController: UIViewController {
     }
     
     func refreshViewContainer() -> UIView{
+        totalSum = 0 // Reset totalSum since we're going to recompute it below.
         let newView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
+        
         // Create Add Entry button.
-        var button = UIButton(frame: CGRect(x: 325, y: 50, width: 50, height: 50))
-        button.backgroundColor = .systemBlue
-        button.setTitle("+", for: .normal)
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        let entryButton = UIButton(frame: CGRect(x: 325, y: 50, width: 50, height: 50))
+        entryButton.backgroundColor = .systemBlue
+        entryButton.setTitle("+", for: .normal)
+        entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
         
         // Add Entry button to view.
-        newView.addSubview(button)
-        
+        newView.addSubview(entryButton)
         
         // Create clear list button.
-        button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
-        button.backgroundColor = .systemRed
-        button.setTitle("-", for: .normal)
-        button.addTarget(self, action: #selector(clearList), for: .touchUpInside)
+        let clearListButton = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
+        clearListButton.backgroundColor = .systemRed
+        clearListButton.setTitle("-", for: .normal)
+        clearListButton.addTarget(self, action: #selector(clearList), for: .touchUpInside)
         
         // Add clear list button to view.
-        newView.addSubview(button)
-        
-        
+        newView.addSubview(clearListButton)
         
         var label = UILabel()
         // Retrieve list
-        var separator = 20
+        var separator = 20 // start off separator at 20, then continuously add to push down our list.
         for item in listOfEntries{
             label = UILabel(frame: CGRect(x: 30, y: 130 + separator, width: 50, height: 50))
             label.text = String(item)
@@ -98,6 +97,14 @@ class ViewController: UIViewController {
     func addEntryView() -> UIView  {
         let newView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
         
+        // Create a back button.
+        let button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
+        button.backgroundColor = .systemRed
+        button.setTitle("<-", for: .normal)
+        button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        
         let label = UILabel(frame: CGRect(x: 30, y: 130, width: 300, height: 50))
         label.text = "Enter your protein intake"
         newView.addSubview(label)
@@ -112,8 +119,15 @@ class ViewController: UIViewController {
         
         return newView
     }
+    
+    @objc func goBack(sender: UIButton!){
+        
+        entryView.removeFromSuperview()
+        viewDidLoad()
+        
+    }
 
-    @objc func buttonAction(sender: UIButton!) {
+    @objc func addEntryButton(sender: UIButton!) {
         
         entryView = addEntryView()
         
@@ -136,9 +150,10 @@ class ViewController: UIViewController {
     
     @objc func submitNewEntry(sender: UITextField!) {
         if let num = Int(sender.text!) {
-            listOfEntries.append(num)
+            if num > 0 { // prevent 0 and negative numbers.
+                listOfEntries.append(num)
+            }
         }
-        totalSum = 0
         
         saveListToStorage()
         
@@ -148,8 +163,8 @@ class ViewController: UIViewController {
         
     }
     
-    // [15, 25, 30, 40] -> "15+25+30+40"
-    func toStorage(list: [Int]) -> String{
+    // [15, 25, 30, 40] -> "15+25+30+40+"
+    func toStorage(list: [Int]) -> String {
         var str = ""
         for item in list{
             str += (String(item) + "+")
@@ -158,7 +173,7 @@ class ViewController: UIViewController {
         return str
     }
     
-    func toList(json: String) -> [Int]{
+    func toList(json: String) -> [Int] {
         var newList: [Int] = []
         
         for item in json.components(separatedBy: ["+"]){
@@ -169,7 +184,7 @@ class ViewController: UIViewController {
     }
     
     
-    func saveListToStorage(){
+    func saveListToStorage() {
         
         let defaults = UserDefaults.standard
         
@@ -177,7 +192,7 @@ class ViewController: UIViewController {
         defaults.set(storedList, forKey: DefaultsKeys.key)
     }
     
-    func loadListFromStorage(){
+    func loadListFromStorage() {
         
         let defaults = UserDefaults.standard
         
