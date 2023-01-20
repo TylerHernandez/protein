@@ -139,6 +139,7 @@ class ViewController: UIViewController {
         let textOutlet = UITextField(frame: CGRect(x: 30, y: 250, width: 150, height: 150))
         textOutlet.placeholder = "input here"
         textOutlet.addTarget(self, action: #selector(submitNewEntry), for: .editingDidEndOnExit)
+        textOutlet.keyboardType = .numbersAndPunctuation
         newView.addSubview(textOutlet)
         
         return newView
