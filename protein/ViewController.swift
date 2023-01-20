@@ -49,6 +49,7 @@ class ViewController: UIViewController {
         }
     }
     
+    // TODO: change background color of app based on totalSum.
     func refreshViewContainer() -> UIView{
         totalSum = 0 // Reset totalSum since we're going to recompute it below.
         let newView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
@@ -98,21 +99,44 @@ class ViewController: UIViewController {
         let newView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
         
         // Create a back button.
-        let button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
+        var button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
         button.backgroundColor = .systemRed
         button.setTitle("<-", for: .normal)
         button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         newView.addSubview(button)
         
+        // Create suggestion buttons for user.
         
-        let label = UILabel(frame: CGRect(x: 30, y: 130, width: 300, height: 50))
+        // 1 Glass of Milk
+        button = UIButton(frame: CGRect(x: 25, y: 130, width: 100, height: 100))
+        button.backgroundColor = .systemCyan
+        button.setTitle("+1 Milk", for: .normal)
+        button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        // 2 Eggs
+        button = UIButton(frame: CGRect(x: 145, y: 130, width: 100, height: 100))
+        button.backgroundColor = .systemMint
+        button.setTitle("+2 Eggs", for: .normal)
+        button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        // 1 Scoop of whey protein
+        button = UIButton(frame: CGRect(x: 265, y: 130, width: 100, height: 100))
+        button.backgroundColor = .systemGreen
+        button.setTitle("+1 Whey", for: .normal)
+        button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        
+        // Create instructional label.
+        let label = UILabel(frame: CGRect(x: 30, y: 230, width: 300, height: 50))
         label.text = "Enter your protein intake"
         newView.addSubview(label)
        
         
-        // Create a textbox for user to input their protein intake for a given meal
-        
-        let textOutlet = UITextField(frame: CGRect(x: 30, y: 150, width: 100, height: 100))
+        // Create a textbox for user to input their protein intake for a given meal.
+        let textOutlet = UITextField(frame: CGRect(x: 30, y: 250, width: 150, height: 150))
         textOutlet.placeholder = "input here"
         textOutlet.addTarget(self, action: #selector(submitNewEntry), for: .editingDidEndOnExit)
         newView.addSubview(textOutlet)
@@ -120,20 +144,38 @@ class ViewController: UIViewController {
         return newView
     }
     
-    @objc func goBack(sender: UIButton!){
+    @objc func addQuickEntry(sender: UIButton!) {
+        var grams = 0
         
+        if (sender.currentTitle == "+1 Milk"){
+            grams = 7
+        }
+        else if (sender.currentTitle == "+2 Eggs"){
+            grams = 12
+        }
+        else if (sender.currentTitle == "+1 Whey"){
+            grams = 25
+        }
+        
+        guard (grams > 0) else {return}
+        
+        // Immitate sending from our textOutlet.
+        let payload = UITextField()
+        payload.text = String(grams)
+        
+        submitNewEntry(sender: payload)
+    }
+    
+    @objc func goBack(sender: UIButton!){
         entryView.removeFromSuperview()
         viewDidLoad()
-        
     }
 
     @objc func addEntryButton(sender: UIButton!) {
-        
         entryView = addEntryView()
         
         view.addSubview(entryView)
         viewContainer.removeFromSuperview()
-        //viewDidLoad()
     }
     
     @objc func clearList(sender: UIButton!) {
