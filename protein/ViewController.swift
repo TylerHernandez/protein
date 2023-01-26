@@ -96,7 +96,10 @@ class ViewController: UIViewController {
     }
     
     func addEntryView() -> UIView  {
-        let newView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
+        
+        let separator: CGFloat = 20
+        
+        let newView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 700))
         
         // Create a back button.
         var button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
@@ -107,36 +110,108 @@ class ViewController: UIViewController {
         
         // Create suggestion buttons for user.
         
-        // 1 Glass of Milk
-        button = UIButton(frame: CGRect(x: 25, y: 130, width: 100, height: 100))
-        button.backgroundColor = .systemCyan
-        button.setTitle("+1 Milk", for: .normal)
+        let startingX: CGFloat = 25
+        let startingY: CGFloat = 130
+        let defaultButtonHeight: CGFloat = 100
+        let defaultButtonWidth: CGFloat = 100
+        let center: CGFloat = newView.frame.width / 2
+        
+        // 1 Glass of milk
+        button = UIButton(frame: CGRect(x: startingX, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemCyan // change color here.
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping // Allows new line text wrap.
+        button.titleLabel?.textAlignment = NSTextAlignment.center // centers text for when line wraps.
+        button.setTitle("+1 Milk \n(7g)", for: .normal)
+        button.tag = 7 // sends grams of protein through tag.
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
-        // 2 Eggs
-        button = UIButton(frame: CGRect(x: 145, y: 130, width: 100, height: 100))
+        
+        var previousX = button.frame.maxX
+        var currentX = previousX + separator
+        
+        // 2 Eggs or 1 serving of yogurt
+        button = UIButton(frame: CGRect(x: currentX, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemMint
-        button.setTitle("+2 Eggs", for: .normal)
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("+2 Eggs/\n+1 Yogurt \n(12g)", for: .normal)
+        button.tag = 12
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
+        
+        
+        previousX = button.frame.maxX
+        currentX = previousX + separator
         
         // 1 Scoop of whey protein
-        button = UIButton(frame: CGRect(x: 265, y: 130, width: 100, height: 100))
+        button = UIButton(frame: CGRect(x: previousX + separator, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemGreen
-        button.setTitle("+1 Whey", for: .normal)
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("+1 Whey \n(25g)", for: .normal)
+        button.tag = 25
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
+        // New Row
+        
+        // 2 Slices of bread
+        var previousY = button.frame.maxY
+        var currentY = previousY + separator
+        
+        button = UIButton(frame: CGRect(x: startingX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemRed
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("+2 Bread \n(10g)", for: .normal)
+        button.tag = 10
+        button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        previousX = button.frame.maxX
+        currentX = previousX + separator
+        
+        // 1 serving of yogurt
+        button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemOrange
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("", for: .normal)
+        button.tag = 0
+        button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        previousX = button.frame.maxX
+        currentX = previousX + separator
+        
+        // TODO
+        button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemYellow
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("", for: .normal)
+        button.tag = 0
+        button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        previousY = button.frame.maxY
+        currentY = previousY + separator
+        currentX = startingX + 5.0
         
         // Create instructional label.
-        let label = UILabel(frame: CGRect(x: 30, y: 230, width: 300, height: 50))
+        let label = UILabel(frame: CGRect(x: center - 150, y: currentY, width: 300, height: 25))
+        label.textAlignment = NSTextAlignment.center
         label.text = "Enter your protein intake"
         newView.addSubview(label)
-       
+        
+        previousY = label.frame.maxY
+        currentY = previousY
+        
         
         // Create a textbox for user to input their protein intake for a given meal.
-        let textOutlet = UITextField(frame: CGRect(x: 30, y: 250, width: 150, height: 150))
+        let textOutlet = UITextField(frame: CGRect(x: center - 75, y: currentY, width: 150, height: 35))
+        textOutlet.textAlignment = NSTextAlignment.center
         textOutlet.placeholder = "input here"
         textOutlet.addTarget(self, action: #selector(submitNewEntry), for: .editingDidEndOnExit)
         textOutlet.keyboardType = .numbersAndPunctuation
@@ -146,17 +221,7 @@ class ViewController: UIViewController {
     }
     
     @objc func addQuickEntry(sender: UIButton!) {
-        var grams = 0
-        
-        if (sender.currentTitle == "+1 Milk"){
-            grams = 7
-        }
-        else if (sender.currentTitle == "+2 Eggs"){
-            grams = 12
-        }
-        else if (sender.currentTitle == "+1 Whey"){
-            grams = 25
-        }
+        let grams = sender.tag // Copy protein amount from button's tag. Default value = 0.
         
         guard (grams > 0) else {return}
         
