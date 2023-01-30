@@ -113,6 +113,7 @@ class ViewController: UIViewController {
         button.backgroundColor = .systemRed
         button.setTitle("<-", for: .normal)
         button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+        button.tag = 0
         newView.addSubview(button)
         
         // Create suggestion buttons for user.
@@ -192,13 +193,23 @@ class ViewController: UIViewController {
         previousX = button.frame.maxX
         currentX = previousX + separator
         
-        // TODO
+        // Config Value
+        
+        var sixthTag = 0
+        var sixthTitle = ""
+        
+        if (config.keys.contains("6thButton")) {
+            if let val = config["6thButton"] {
+                sixthTitle = val
+                // TODO: Strip protein value from val and assign sixthTag.
+            }
+        }
         button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemYellow
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("", for: .normal)
-        button.tag = 0
+        button.setTitle(sixthTitle, for: .normal)
+        button.tag = sixthTag
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
@@ -228,7 +239,33 @@ class ViewController: UIViewController {
     }
     
     func editConfigView() -> UIView {
-        return UIView()
+        
+        let configView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 700))
+        
+        // Create back button.
+        let backButton = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
+        backButton.backgroundColor = .systemRed
+        backButton.setTitle("<-", for: .normal)
+        backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+        backButton.tag = 1
+        configView.addSubview(backButton)
+        
+        // Create text outlet for config value
+        let textOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 65))
+        textOutlet.textAlignment = NSTextAlignment.center
+        textOutlet.text = "{\"6thButton\":\"+1TestValue\n(18g)\"}"
+        textOutlet.addTarget(self, action: #selector(saveToConfig), for: .editingDidEndOnExit)
+        configView.addSubview(textOutlet)
+    
+        return configView
+    }
+    
+    @objc func saveToConfig(sender: UITextField!) {
+        if let text = sender.text {
+            if let dict = dictFromString(str: text) {
+                config = dict
+            }
+        }
     }
     
     @objc func addQuickEntry(sender: UIButton!) {
@@ -244,7 +281,14 @@ class ViewController: UIViewController {
     }
     
     @objc func goBack(sender: UIButton!){
-        entryView.removeFromSuperview()
+        // Back Buttons are tagged by which view sent them.
+        // 0 = entryView, 1 = configView
+        if (sender.tag == 0) {
+            entryView.removeFromSuperview()
+        } else if (sender.tag == 1) {
+            configView.removeFromSuperview()
+        }
+        
         viewDidLoad()
     }
 
@@ -296,18 +340,26 @@ class ViewController: UIViewController {
     /// Config
     // Retrieve a string version of config to store.
     func stringifyConfig(config: Dictionary<String, String>) -> String {
-        var str = ""
+        var str = "{"
         for (key, value) in config {
-            str += (key + value + "+")
+            str += (key + " : " + value + ",")
         }
-        // DEBUG STRING
-        print(str)
+        str += "}"
         return str
     }
     
     // Given a string dictionary, format into usable data type.
-    func dictFromString(str: String) -> Dictionary<String, String> {
-        return ["a": "b"]
+    func dictFromString(str: String) -> Dictionary<String, String>? {
+
+        if let data = str.data(using: .utf8) {
+            return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
+        }
+        return nil
+    }
+    
+    func stringFromDict(dict: Dictionary<String, String> ) -> String? {
+        // TODO.
+        return nil
     }
     
     /// Entries
@@ -369,7 +421,9 @@ class ViewController: UIViewController {
         let defaults = UserDefaults.standard
         
         if let storedConfigStr = defaults.string(forKey: DefaultsKeys.configKey) {
-            config = dictFromString(str: storedConfigStr)
+            if let dict = dictFromString(str: storedConfigStr) {
+                config = dict
+            }
         }
         
     }
