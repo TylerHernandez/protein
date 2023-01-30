@@ -15,15 +15,18 @@ import UIKit
 
 struct DefaultsKeys {
     static let key = "this_is_my_key"
+    static let configKey = "this_is_my_config_key"
 }
 
 class ViewController: UIViewController {
     
     var listOfEntries: [Int] = []
+    var config: Dictionary<String, String> = [:]
     var totalSum = 0
     
     var viewContainer: UIView = UIView()
     var entryView: UIView = UIView()
+    var configView: UIView = UIView()
     
     var currentEntry = 0
 
@@ -54,23 +57,27 @@ class ViewController: UIViewController {
         totalSum = 0 // Reset totalSum since we're going to recompute it below.
         let newView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
         
-        // Create Add Entry button.
-        let entryButton = UIButton(frame: CGRect(x: 325, y: 50, width: 50, height: 50))
-        entryButton.backgroundColor = .systemBlue
-        entryButton.setTitle("+", for: .normal)
-        entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
-        
-        // Add Entry button to view.
-        newView.addSubview(entryButton)
-        
         // Create clear list button.
         let clearListButton = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
         clearListButton.backgroundColor = .systemRed
         clearListButton.setTitle("-", for: .normal)
         clearListButton.addTarget(self, action: #selector(clearList), for: .touchUpInside)
-        
-        // Add clear list button to view.
         newView.addSubview(clearListButton)
+        
+        // Create Edit Config button.
+        let configButton = UIButton(frame: CGRect(x: 160, y: 50, width: 50, height: 50))
+        configButton.backgroundColor = .systemGreen
+        configButton.setTitle("!", for: .normal)
+        configButton.addTarget(self, action: #selector(editConfigButton), for: .touchUpInside)
+        newView.addSubview(configButton)
+        
+        // Create Add Entry button.
+        let entryButton = UIButton(frame: CGRect(x: 325, y: 50, width: 50, height: 50))
+        entryButton.backgroundColor = .systemBlue
+        entryButton.setTitle("+", for: .normal)
+        entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
+        newView.addSubview(entryButton)
+        
         
         var label = UILabel()
         // Retrieve list
@@ -220,6 +227,10 @@ class ViewController: UIViewController {
         return newView
     }
     
+    func editConfigView() -> UIView {
+        return UIView()
+    }
+    
     @objc func addQuickEntry(sender: UIButton!) {
         let grams = sender.tag // Copy protein amount from button's tag. Default value = 0.
         
@@ -241,6 +252,13 @@ class ViewController: UIViewController {
         entryView = addEntryView()
         
         view.addSubview(entryView)
+        viewContainer.removeFromSuperview()
+    }
+    
+    @objc func editConfigButton(sender: UIButton!) {
+        configView = editConfigView()
+        
+        view.addSubview(configView)
         viewContainer.removeFromSuperview()
     }
     
@@ -271,6 +289,28 @@ class ViewController: UIViewController {
         
     }
     
+    ///
+    /// Storage Helper Functions
+    ///
+    
+    /// Config
+    // Retrieve a string version of config to store.
+    func stringifyConfig(config: Dictionary<String, String>) -> String {
+        var str = ""
+        for (key, value) in config {
+            str += (key + value + "+")
+        }
+        // DEBUG STRING
+        print(str)
+        return str
+    }
+    
+    // Given a string dictionary, format into usable data type.
+    func dictFromString(str: String) -> Dictionary<String, String> {
+        return ["a": "b"]
+    }
+    
+    /// Entries
     // [15, 25, 30, 40] -> "15+25+30+40+"
     func toStorage(list: [Int]) -> String {
         var str = ""
@@ -281,16 +321,19 @@ class ViewController: UIViewController {
         return str
     }
     
-    func toList(json: String) -> [Int] {
+    func toList(str: String) -> [Int] {
         var newList: [Int] = []
         
-        for item in json.components(separatedBy: ["+"]){
+        for item in str.components(separatedBy: ["+"]){
             if let itemInt = Int(item) {newList.append(itemInt)} else { return newList }
         }
         
         return newList
     }
     
+    ///
+    /// Loading from and saving to storage.
+    ///
     
     func saveListToStorage() {
         
@@ -305,8 +348,30 @@ class ViewController: UIViewController {
         let defaults = UserDefaults.standard
         
         if let storedList = defaults.string(forKey: DefaultsKeys.key) {
-            listOfEntries = toList(json: storedList)
+            listOfEntries = toList(str: storedList)
         }
+    }
+    
+    // Puts dictionary config into storage
+    func storeConfig(config: Dictionary<String, String>){
+        
+        
+        let defaults = UserDefaults.standard
+        
+        let str = stringifyConfig(config: config)
+        defaults.set(str, forKey: DefaultsKeys.configKey)
+    }
+    
+    // Retrieves a config from storage as a dictionary
+    func loadConfig()  {
+        // look inside storage for existing config.
+        
+        let defaults = UserDefaults.standard
+        
+        if let storedConfigStr = defaults.string(forKey: DefaultsKeys.configKey) {
+            config = dictFromString(str: storedConfigStr)
+        }
+        
     }
 
 
