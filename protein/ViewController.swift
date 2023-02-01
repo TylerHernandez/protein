@@ -14,7 +14,7 @@ import UIKit
  */
 
 struct DefaultsKeys {
-    static let key = "this_is_my_key"
+    static let entryKey = "this_is_my_key"
     static let configKey = "this_is_my_config_key"
 }
 
@@ -36,6 +36,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         loadListFromStorage()
+        
+        loadConfig()
         
         viewContainer = refreshViewContainer()
         
@@ -201,7 +203,10 @@ class ViewController: UIViewController {
         if (config.keys.contains("6thButton")) {
             if let val = config["6thButton"] {
                 sixthTitle = val
-                // TODO: Strip protein value from val and assign sixthTag.
+                // Strip protein value from val and assign sixthTag.
+                if let sixthGrams = stripProteinFrom(str: sixthTitle) {
+                    sixthTag = sixthGrams
+                }
             }
         }
         button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
@@ -253,9 +258,11 @@ class ViewController: UIViewController {
         // Create text outlet for config value
         let textOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 65))
         textOutlet.textAlignment = NSTextAlignment.center
-        textOutlet.text = "{\"6thButton\":\"+1TestValue\n(18g)\"}"
+        textOutlet.text = stringifyConfig(config: config) //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
         textOutlet.addTarget(self, action: #selector(saveToConfig), for: .editingDidEndOnExit)
         configView.addSubview(textOutlet)
+        
+        // TODO: Create a form instead of a textOutlet which has bubbles for each button value.
     
         return configView
     }
@@ -264,6 +271,7 @@ class ViewController: UIViewController {
         if let text = sender.text {
             if let dict = dictFromString(str: text) {
                 config = dict
+                storeConfig(config: config)
             }
         }
     }
@@ -333,6 +341,21 @@ class ViewController: UIViewController {
         
     }
     
+    // Helper function for finding how much protein is in the title
+    // E.g. "+1 test value (18g)" -> 18
+    func stripProteinFrom(str: String) -> Int? {
+        var protein = ""
+        
+        if let startIndex = str.firstIndex(of: "(") {
+            if let endIndex = str.lastIndex(of: "g"){
+                let range = str.index(after: startIndex)..<endIndex
+                protein = String(str[range])
+            }
+        }
+        
+        return Int(protein)
+    }
+    
     ///
     /// Storage Helper Functions
     ///
@@ -342,7 +365,7 @@ class ViewController: UIViewController {
     func stringifyConfig(config: Dictionary<String, String>) -> String {
         var str = "{"
         for (key, value) in config {
-            str += (key + " : " + value + ",")
+            str += ("\"" + key + "\" : \"" + value + "\",")
         }
         str += "}"
         return str
@@ -354,11 +377,6 @@ class ViewController: UIViewController {
         if let data = str.data(using: .utf8) {
             return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
         }
-        return nil
-    }
-    
-    func stringFromDict(dict: Dictionary<String, String> ) -> String? {
-        // TODO.
         return nil
     }
     
@@ -392,21 +410,20 @@ class ViewController: UIViewController {
         let defaults = UserDefaults.standard
         
         let storedList = toStorage(list: listOfEntries)
-        defaults.set(storedList, forKey: DefaultsKeys.key)
+        defaults.set(storedList, forKey: DefaultsKeys.entryKey)
     }
     
     func loadListFromStorage() {
         
         let defaults = UserDefaults.standard
         
-        if let storedList = defaults.string(forKey: DefaultsKeys.key) {
+        if let storedList = defaults.string(forKey: DefaultsKeys.entryKey) {
             listOfEntries = toList(str: storedList)
         }
     }
     
     // Puts dictionary config into storage
     func storeConfig(config: Dictionary<String, String>){
-        
         
         let defaults = UserDefaults.standard
         
@@ -416,7 +433,6 @@ class ViewController: UIViewController {
     
     // Retrieves a config from storage as a dictionary
     func loadConfig()  {
-        // look inside storage for existing config.
         
         let defaults = UserDefaults.standard
         
@@ -425,7 +441,6 @@ class ViewController: UIViewController {
                 config = dict
             }
         }
-        
     }
 
 
