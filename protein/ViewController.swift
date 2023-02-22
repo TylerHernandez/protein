@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 /*
  
@@ -19,6 +20,9 @@ struct DefaultsKeys {
 }
 
 class ViewController: UIViewController {
+    
+    var buttonName = ""
+    var buttonValue = ""
     
     var listOfEntries: [Int] = []
     var config: Dictionary<String, String> = [:]
@@ -233,19 +237,32 @@ class ViewController: UIViewController {
         
         
         // Create a textbox for user to input their protein intake for a given meal.
-        let textOutlet = UITextField(frame: CGRect(x: center - 75, y: currentY, width: 150, height: 35))
-        textOutlet.textAlignment = NSTextAlignment.center
-        textOutlet.placeholder = "input here"
-        textOutlet.addTarget(self, action: #selector(submitNewEntry), for: .editingDidEndOnExit)
-        textOutlet.keyboardType = .numbersAndPunctuation
-        newView.addSubview(textOutlet)
+        let entryOutlet = UITextField(frame: CGRect(x: center - 75, y: currentY, width: 150, height: 35))
+        entryOutlet.textAlignment = NSTextAlignment.center
+        entryOutlet.placeholder = "Entry Here"
+        entryOutlet.addTarget(self, action: #selector(submitNewEntry), for: .editingDidEndOnExit)
+        entryOutlet.keyboardType = .numbersAndPunctuation
+        newView.addSubview(entryOutlet)
+        
+        previousY = label.frame.maxY
+        currentY = previousY + 50
+        
+        
+        // Create a textbox for user to input their protein intake for a given meal.
+        let removeOutlet = UITextField(frame: CGRect(x: center - 75, y: currentY, width: 150, height: 35))
+        removeOutlet.textAlignment = NSTextAlignment.center
+        removeOutlet.placeholder = "REMOVE HERE"
+        removeOutlet.addTarget(self, action: #selector(removeOldEntry), for: .editingDidEndOnExit)
+        removeOutlet.keyboardType = .numbersAndPunctuation
+        newView.addSubview(removeOutlet)
         
         return newView
     }
     
+    // @TYH@
     func editConfigView() -> UIView {
         
-        let configView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 700))
+        let configView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 1000))
         
         // Create back button.
         let backButton = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
@@ -255,31 +272,66 @@ class ViewController: UIViewController {
         backButton.tag = 1
         configView.addSubview(backButton)
         
+        let firstOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 50))
+        firstOutlet.textAlignment = NSTextAlignment.center
+        firstOutlet.borderStyle = .roundedRect
+        firstOutlet.text = buttonName
+        firstOutlet.addTarget(self, action: #selector(saveName), for: .allEditingEvents)
+        configView.addSubview(firstOutlet)
+        
+        
         // Create text outlet for config value
-        let textOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 65))
+        let textOutlet = UITextField(frame: CGRect(x: 100, y: 150, width: 150, height: 50))
         textOutlet.textAlignment = NSTextAlignment.center
-        textOutlet.text = stringifyConfig(config: config) //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
-        textOutlet.addTarget(self, action: #selector(saveToConfig), for: .editingDidEndOnExit)
+        textOutlet.borderStyle = .roundedRect
+        textOutlet.keyboardType = .numberPad
+        textOutlet.text = buttonValue//stringifyConfig(config: config) //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
+        textOutlet.addTarget(self, action: #selector(saveValue), for: .allEditingEvents)
         configView.addSubview(textOutlet)
         
-        // TODO: Create a form instead of a textOutlet which has bubbles for each button value.
+    
+        let saveConfig = UIButton(frame: CGRect(x: 100, y: 200, width: 100, height: 50))
+        saveConfig.backgroundColor = .systemGreen
+        saveConfig.setTitle("SUBMIT", for: .normal)
+        saveConfig.addTarget(self, action: #selector(saveToConfig), for: .touchUpInside)
+        configView.addSubview(saveConfig)
     
         return configView
     }
     
-    @objc func saveToConfig(sender: UITextField!) {
+    @objc func saveName(sender: UITextField!) {
         if let text = sender.text {
-            if let dict = dictFromString(str: text) {
-                config = dict
-                storeConfig(config: config)
-            }
+            buttonName = text
         }
+    }
+    @objc func saveValue(sender: UITextField!) {
+        if let text = sender.text {
+            buttonValue = text
+        }
+    }
+    
+    //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
+    @objc func saveToConfig(sender: UIButton!) {
+        
+        //let text = "{\"6thButton\":\"\(buttonName)\n(\(buttonValue)g)}\""
+        //let text = "{\"6thButton\" : \"+1TestValue\n(18g)\"}"
+        let values = buttonName + "(" + buttonValue + "g)"
+        let text = "{\"6thButton\":\"" + values + "\"}"
+        print("Saving value " + text + "for 6th button")
+        
+            if let dict = dictFromString(str: text) {
+                config = config.merging(dict){ (_, new) in new } // merges config with new values in dict.
+                storeConfig(config: config)
+            } else {
+                print("failed dict from String")
+            }
+        
     }
     
     @objc func addQuickEntry(sender: UIButton!) {
         let grams = sender.tag // Copy protein amount from button's tag. Default value = 0.
         
-        guard (grams > 0) else {return}
+        guard (grams > 0) else { return }
         
         // Immitate sending from our textOutlet.
         let payload = UITextField()
@@ -326,6 +378,22 @@ class ViewController: UIViewController {
         viewDidLoad()
     }
     
+    @objc func removeOldEntry(sender: UITextField!) {
+        if let num = Int(sender.text!) {
+            if num > 0 { // these nums will never be added.
+                if let index = listOfEntries.lastIndex(of: num) {
+                    listOfEntries.remove(at: index)
+                }
+            }
+        }
+        
+        saveListToStorage()
+        
+        entryView.removeFromSuperview()
+        
+        viewDidLoad()
+    }
+    
     @objc func submitNewEntry(sender: UITextField!) {
         if let num = Int(sender.text!) {
             if num > 0 { // prevent 0 and negative numbers.
@@ -338,7 +406,6 @@ class ViewController: UIViewController {
         entryView.removeFromSuperview()
         
         viewDidLoad()
-        
     }
     
     // Helper function for finding how much protein is in the title
