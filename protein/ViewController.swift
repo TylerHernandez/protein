@@ -272,6 +272,13 @@ class ViewController: UIViewController {
         backButton.tag = 1
         configView.addSubview(backButton)
         
+        // TODO: add a view where user can select a button from 1-6.
+        
+//        var wheel : some View {
+//            ButtonWheelPicker()
+//        }
+//        configView.addSubview(wheel as! UIView)
+        
         let firstOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 50))
         firstOutlet.textAlignment = NSTextAlignment.center
         firstOutlet.borderStyle = .roundedRect
@@ -288,8 +295,8 @@ class ViewController: UIViewController {
         textOutlet.text = buttonValue//stringifyConfig(config: config) //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
         textOutlet.addTarget(self, action: #selector(saveValue), for: .allEditingEvents)
         configView.addSubview(textOutlet)
-        
-    
+
+
         let saveConfig = UIButton(frame: CGRect(x: 100, y: 200, width: 100, height: 50))
         saveConfig.backgroundColor = .systemGreen
         saveConfig.setTitle("SUBMIT", for: .normal)
@@ -310,14 +317,11 @@ class ViewController: UIViewController {
         }
     }
     
-    //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
     @objc func saveToConfig(sender: UIButton!) {
         
-        //let text = "{\"6thButton\":\"\(buttonName)\n(\(buttonValue)g)}\""
-        //let text = "{\"6thButton\" : \"+1TestValue\n(18g)\"}"
+        
         let values = buttonName + "(" + buttonValue + "g)"
         let text = "{\"6thButton\":\"" + values + "\"}"
-        print("Saving value " + text + "for 6th button")
         
             if let dict = dictFromString(str: text) {
                 config = config.merging(dict){ (_, new) in new } // merges config with new values in dict.
@@ -325,6 +329,10 @@ class ViewController: UIViewController {
             } else {
                 print("failed dict from String")
             }
+        
+        configView.removeFromSuperview()
+        viewDidLoad()
+        
         
     }
     
