@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     
     var currentEntry = 0
     
-    var currentlyEdittingButton = 0 // Keeps track of which button we are editting.
+    var currentlyEdittingButton = 6 // Keeps track of which button we are editting.
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -417,12 +417,36 @@ class ViewController: UIViewController {
         backButton.tag = 1
         configView.addSubview(backButton)
         
+        // Retrieve currentlyEdittingButton's name and value
+            // This variable is changing too late.
+        
+        let key = String(currentlyEdittingButton) + "Button"
+        
+        var retrievedName: String = ""
+        var retrievedValue: Int = 0
+        
+        if (config.keys.contains(key)) {
+            if let val = config[key] {
+                retrievedName = val
+                
+                if let grams = stripProteinFrom(str: retrievedName) {
+                    retrievedValue = grams
+                }
+                
+                // find index of "(", remove everything past that.
+                while(retrievedName.contains("(")) {
+                    retrievedName.removeLast()
+                }
+            }
+        }
+        
         let firstOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 50))
         firstOutlet.textAlignment = NSTextAlignment.center
         firstOutlet.borderStyle = .roundedRect
-        firstOutlet.text = buttonName
-        firstOutlet.addTarget(self, action: #selector(saveName), for: .allEditingEvents)
+        firstOutlet.text = retrievedName
+        firstOutlet.addTarget(self, action: #selector(saveName), for: .allEvents)
         configView.addSubview(firstOutlet)
+        saveName(sender: firstOutlet)
         
         
         // Create text outlet for config value
@@ -430,9 +454,16 @@ class ViewController: UIViewController {
         textOutlet.textAlignment = NSTextAlignment.center
         textOutlet.borderStyle = .roundedRect
         textOutlet.keyboardType = .numberPad
-        textOutlet.text = buttonValue
-        textOutlet.addTarget(self, action: #selector(saveValue), for: .allEditingEvents)
+        
+        if (retrievedValue > 0) {
+            textOutlet.text = String(retrievedValue)
+        } else {
+            textOutlet.text = ""
+        }
+        
+        textOutlet.addTarget(self, action: #selector(saveValue), for: .allEvents)
         configView.addSubview(textOutlet)
+        saveValue(sender: textOutlet)
 
 
         let saveConfig = UIButton(frame: CGRect(x: 100, y: 200, width: 100, height: 50))
@@ -445,17 +476,21 @@ class ViewController: UIViewController {
     }
     
     @objc func saveName(sender: UITextField!) {
+        print("saved name")
         if let text = sender.text {
             buttonName = text
         }
     }
     @objc func saveValue(sender: UITextField!) {
+        print("saved value")
         if let text = sender.text {
             buttonValue = text
         }
     }
     
     @objc func saveToConfig(sender: UIButton!) {
+        
+        
         
         let buttonText = String(currentlyEdittingButton) + "Button" // Determine button we are editting.
         
@@ -473,20 +508,18 @@ class ViewController: UIViewController {
         configView.removeFromSuperview()
         viewDidLoad()
         
-        
     }
     
     // Mark down which button we are editting from sender, then display our config view.
     @objc func didSelectButton(sender: UIButton!) {
+        // Copy button from button's tag. E.g. 1 = first button.
+        currentlyEdittingButton = sender.tag // Mark which button we are going to edit
+        
         transitionView.removeFromSuperview()
         configView = editConfigView()
         
         view.addSubview(configView)
         viewContainer.removeFromSuperview()
-        
-        let button = sender.tag // Copy button from button's tag. E.g. 1 = first button.
-        currentlyEdittingButton = button // Mark which button we are going to edit
-        
         
     }
     
