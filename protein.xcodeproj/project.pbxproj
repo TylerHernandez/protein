@@ -16,7 +16,6 @@
 		627ECB8728E5F87C00C4CDBD /* proteinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB8628E5F87C00C4CDBD /* proteinTests.swift */; };
 		627ECB9128E5F87C00C4CDBD /* proteinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB9028E5F87C00C4CDBD /* proteinUITests.swift */; };
 		627ECB9328E5F87C00C4CDBD /* proteinUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB9228E5F87C00C4CDBD /* proteinUITestsLaunchTests.swift */; };
-		62AD138C29A6E28100DE870A /* ButtonWheelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AD138B29A6E28100DE870A /* ButtonWheelPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +49,6 @@
 		627ECB8C28E5F87C00C4CDBD /* proteinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = proteinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		627ECB9028E5F87C00C4CDBD /* proteinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinUITests.swift; sourceTree = "<group>"; };
 		627ECB9228E5F87C00C4CDBD /* proteinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		62AD138B29A6E28100DE870A /* ButtonWheelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWheelPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +102,6 @@
 				627ECB6F28E5F87B00C4CDBD /* AppDelegate.swift */,
 				627ECB7128E5F87B00C4CDBD /* SceneDelegate.swift */,
 				627ECB7328E5F87B00C4CDBD /* ViewController.swift */,
-				62AD138B29A6E28100DE870A /* ButtonWheelPicker.swift */,
 				627ECB7528E5F87B00C4CDBD /* Main.storyboard */,
 				627ECB7828E5F87C00C4CDBD /* Assets.xcassets */,
 				627ECB7A28E5F87C00C4CDBD /* LaunchScreen.storyboard */,
@@ -262,7 +259,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				627ECB7428E5F87B00C4CDBD /* ViewController.swift in Sources */,
-				62AD138C29A6E28100DE870A /* ButtonWheelPicker.swift in Sources */,
 				627ECB7028E5F87B00C4CDBD /* AppDelegate.swift in Sources */,
 				627ECB7228E5F87B00C4CDBD /* SceneDelegate.swift in Sources */,
 			);
