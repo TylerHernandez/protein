@@ -14,7 +14,7 @@ struct ButtonWheelPicker: View {
     
     var body: some View {
         VStack {
-            Text("Letter: \(num)")
+            Text("Number: \(num)")
             Picker("", selection: $num) {
                 ForEach([1,2,3,4,5,6], id: \.self) {
                     Text("\($0)")

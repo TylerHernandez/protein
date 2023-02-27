@@ -31,8 +31,11 @@ class ViewController: UIViewController {
     var viewContainer: UIView = UIView()
     var entryView: UIView = UIView()
     var configView: UIView = UIView()
+    var transitionView: UIView = UIView()
     
     var currentEntry = 0
+    
+    var currentlyEdittingButton = 0 // Keeps track of which button we are editting.
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,13 +189,25 @@ class ViewController: UIViewController {
         previousX = button.frame.maxX
         currentX = previousX + separator
         
-        // 1 serving of yogurt
+        var fifthTag = 0
+        var fifthTitle = ""
+        
+        if (config.keys.contains("5Button")) {
+            if let val = config["5Button"] {
+                fifthTitle = val
+                // Strip protein value from val and assign sixthTag.
+                if let fifthGrams = stripProteinFrom(str: fifthTitle) {
+                    fifthTag = fifthGrams
+                }
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemOrange
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("", for: .normal)
-        button.tag = 0
+        button.setTitle(fifthTitle, for: .normal)
+        button.tag = fifthTag
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
@@ -204,8 +219,8 @@ class ViewController: UIViewController {
         var sixthTag = 0
         var sixthTitle = ""
         
-        if (config.keys.contains("6thButton")) {
-            if let val = config["6thButton"] {
+        if (config.keys.contains("6Button")) {
+            if let val = config["6Button"] {
                 sixthTitle = val
                 // Strip protein value from val and assign sixthTag.
                 if let sixthGrams = stripProteinFrom(str: sixthTitle) {
@@ -259,6 +274,136 @@ class ViewController: UIViewController {
         return newView
     }
     
+    func transitionConfigView() -> UIView {
+        
+        // Display our buttons and their current values.
+        
+        let separator: CGFloat = 20
+        
+        let newView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 700))
+        
+        // Create a back button.
+        var button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
+        button.backgroundColor = .systemRed
+        button.setTitle("<-", for: .normal)
+        button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+        button.tag = 2
+        newView.addSubview(button)
+        
+        // Create suggestion buttons for user.
+        
+        let startingX: CGFloat = 25
+        let startingY: CGFloat = 130
+        let defaultButtonHeight: CGFloat = 100
+        let defaultButtonWidth: CGFloat = 100
+        
+        // First button
+        button = UIButton(frame: CGRect(x: startingX, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemCyan // change color here.
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping // Allows new line text wrap.
+        button.titleLabel?.textAlignment = NSTextAlignment.center // centers text for when line wraps.
+        button.setTitle("", for: .normal)
+        button.tag = 1 // Send which button through tag
+        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        
+        var previousX = button.frame.maxX
+        var currentX = previousX + separator
+        
+        // Second button
+        button = UIButton(frame: CGRect(x: currentX, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemMint
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("", for: .normal)
+        button.tag = 2
+        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        
+        previousX = button.frame.maxX
+        currentX = previousX + separator
+        
+        // Third button
+        button = UIButton(frame: CGRect(x: previousX + separator, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemGreen
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("", for: .normal)
+        button.tag = 3
+        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        // New Row
+        
+        var previousY = button.frame.maxY
+        var currentY = previousY + separator
+        
+        // Fourth button
+        button = UIButton(frame: CGRect(x: startingX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemRed
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle("", for: .normal)
+        button.tag = 4
+        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        previousX = button.frame.maxX
+        currentX = previousX + separator
+        
+        // Fifth button
+        var fifthTitle = ""
+        
+        if (config.keys.contains("5Button")) {
+            if let val = config["5Button"] {
+                fifthTitle = val
+            }
+        }
+        
+        
+        button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemOrange
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle(fifthTitle, for: .normal)
+        button.tag = 5
+        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        previousX = button.frame.maxX
+        currentX = previousX + separator
+        
+        // Sixth Button
+        
+        var sixthTitle = ""
+        
+        if (config.keys.contains("6Button")) {
+            if let val = config["6Button"] {
+                sixthTitle = val
+            }
+        }
+        button = UIButton(frame: CGRect(x: currentX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
+        button.backgroundColor = .systemYellow
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        button.titleLabel?.textAlignment = NSTextAlignment.center
+        button.setTitle(sixthTitle, for: .normal)
+        button.tag = 6
+        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        newView.addSubview(button)
+        
+        previousY = button.frame.maxY
+        currentY = previousY + separator
+        currentX = startingX + 5.0
+        
+        
+        return newView
+        
+    }
+    
+    
+    
     // @TYH@
     func editConfigView() -> UIView {
         
@@ -271,13 +416,6 @@ class ViewController: UIViewController {
         backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         backButton.tag = 1
         configView.addSubview(backButton)
-        
-        // TODO: add a view where user can select a button from 1-6.
-        
-//        var wheel : some View {
-//            ButtonWheelPicker()
-//        }
-//        configView.addSubview(wheel as! UIView)
         
         let firstOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 50))
         firstOutlet.textAlignment = NSTextAlignment.center
@@ -292,7 +430,7 @@ class ViewController: UIViewController {
         textOutlet.textAlignment = NSTextAlignment.center
         textOutlet.borderStyle = .roundedRect
         textOutlet.keyboardType = .numberPad
-        textOutlet.text = buttonValue//stringifyConfig(config: config) //"{\"6thButton\":\"+1TestValue\n(18g)\"}"
+        textOutlet.text = buttonValue
         textOutlet.addTarget(self, action: #selector(saveValue), for: .allEditingEvents)
         configView.addSubview(textOutlet)
 
@@ -319,9 +457,11 @@ class ViewController: UIViewController {
     
     @objc func saveToConfig(sender: UIButton!) {
         
+        let buttonText = String(currentlyEdittingButton) + "Button" // Determine button we are editting.
+        
         
         let values = buttonName + "(" + buttonValue + "g)"
-        let text = "{\"6thButton\":\"" + values + "\"}"
+        let text = "{\"" + buttonText + "\":\"" + values + "\"}"
         
             if let dict = dictFromString(str: text) {
                 config = config.merging(dict){ (_, new) in new } // merges config with new values in dict.
@@ -332,6 +472,20 @@ class ViewController: UIViewController {
         
         configView.removeFromSuperview()
         viewDidLoad()
+        
+        
+    }
+    
+    // Mark down which button we are editting from sender, then display our config view.
+    @objc func didSelectButton(sender: UIButton!) {
+        transitionView.removeFromSuperview()
+        configView = editConfigView()
+        
+        view.addSubview(configView)
+        viewContainer.removeFromSuperview()
+        
+        let button = sender.tag // Copy button from button's tag. E.g. 1 = first button.
+        currentlyEdittingButton = button // Mark which button we are going to edit
         
         
     }
@@ -355,6 +509,9 @@ class ViewController: UIViewController {
             entryView.removeFromSuperview()
         } else if (sender.tag == 1) {
             configView.removeFromSuperview()
+        } else if (sender.tag == 2) {
+            transitionView.removeFromSuperview()
+            
         }
         
         viewDidLoad()
@@ -368,9 +525,9 @@ class ViewController: UIViewController {
     }
     
     @objc func editConfigButton(sender: UIButton!) {
-        configView = editConfigView()
+        transitionView = transitionConfigView()
         
-        view.addSubview(configView)
+        view.addSubview(transitionView)
         viewContainer.removeFromSuperview()
     }
     
