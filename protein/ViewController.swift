@@ -8,16 +8,12 @@
 import UIKit
 import SwiftUI
 
-/*
- 
-    MVP: Display a list of numbers vertically and sum below. User is able to add numbers to list. User is able to reset list.
- 
- */
 
 struct DefaultsKeys {
     static let entryKey = "this_is_my_key"
     static let configKey = "this_is_my_config_key"
 }
+
 
 class ViewController: UIViewController {
     
@@ -36,6 +32,8 @@ class ViewController: UIViewController {
     var currentEntry = 0
     
     var currentlyEdittingButton = 6 // Keeps track of which button we are editting.
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +58,12 @@ class ViewController: UIViewController {
 
         }
     }
+    
+    ///
+    ///
+    /// Views
+    ///
+    ///
     
     // TODO: change background color of app based on totalSum.
     func refreshViewContainer() -> UIView{
@@ -133,13 +137,25 @@ class ViewController: UIViewController {
         let defaultButtonWidth: CGFloat = 100
         let center: CGFloat = newView.frame.width / 2
         
-        // 1 Glass of milk
+        var firstTag = 0
+        var firstTitle = ""
+        
+        if (config.keys.contains("1Button")) {
+            if let val = config["1Button"] {
+                firstTitle = val
+                // Strip protein value from val and assign tag.
+                if let grams = stripProteinFrom(str: firstTitle) {
+                    firstTag = grams
+                }
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: startingX, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemCyan // change color here.
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping // Allows new line text wrap.
         button.titleLabel?.textAlignment = NSTextAlignment.center // centers text for when line wraps.
-        button.setTitle("+1 Milk \n(7g)", for: .normal)
-        button.tag = 7 // sends grams of protein through tag.
+        button.setTitle(firstTitle, for: .normal)
+        button.tag = firstTag // sends grams of protein through tag.
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
@@ -147,13 +163,25 @@ class ViewController: UIViewController {
         var previousX = button.frame.maxX
         var currentX = previousX + separator
         
-        // 2 Eggs or 1 serving of yogurt
+        var secondTag = 0
+        var secondTitle = ""
+        
+        if (config.keys.contains("2Button")) {
+            if let val = config["2Button"] {
+                secondTitle = val
+                // Strip protein value from val and assign tag.
+                if let grams = stripProteinFrom(str: secondTitle) {
+                    secondTag = grams
+                }
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: currentX, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemMint
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("+2 Eggs/\n+1 Yogurt \n(12g)", for: .normal)
-        button.tag = 12
+        button.setTitle(secondTitle, for: .normal)
+        button.tag = secondTag
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
@@ -161,28 +189,53 @@ class ViewController: UIViewController {
         previousX = button.frame.maxX
         currentX = previousX + separator
         
-        // 1 Scoop of whey protein
+        
+        var thirdTag = 0
+        var thirdTitle = ""
+        
+        if (config.keys.contains("3Button")) {
+            if let val = config["3Button"] {
+                thirdTitle = val
+                // Strip protein value from val and assign tag.
+                if let grams = stripProteinFrom(str: thirdTitle) {
+                    thirdTag = grams
+                }
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: previousX + separator, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemGreen
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("+1 Whey \n(25g)", for: .normal)
-        button.tag = 25
+        button.setTitle(thirdTitle, for: .normal)
+        button.tag = thirdTag
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
         // New Row
         
-        // 2 Slices of bread
         var previousY = button.frame.maxY
         var currentY = previousY + separator
+        
+        var fourthTag = 0
+        var fourthTitle = ""
+        
+        if (config.keys.contains("4Button")) {
+            if let val = config["4Button"] {
+                fourthTitle = val
+                // Strip protein value from val and assign tag.
+                if let fourthGrams = stripProteinFrom(str: fourthTitle) {
+                    fourthTag = fourthGrams
+                }
+            }
+        }
         
         button = UIButton(frame: CGRect(x: startingX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemRed
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("+2 Bread \n(10g)", for: .normal)
-        button.tag = 10
+        button.setTitle(fourthTitle, for: .normal)
+        button.tag = fourthTag
         button.addTarget(self, action: #selector(addQuickEntry), for: .touchUpInside)
         newView.addSubview(button)
         
@@ -195,7 +248,7 @@ class ViewController: UIViewController {
         if (config.keys.contains("5Button")) {
             if let val = config["5Button"] {
                 fifthTitle = val
-                // Strip protein value from val and assign sixthTag.
+                // Strip protein value from val and assign tag.
                 if let fifthGrams = stripProteinFrom(str: fifthTitle) {
                     fifthTag = fifthGrams
                 }
@@ -289,6 +342,16 @@ class ViewController: UIViewController {
         button.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         button.tag = 2
         newView.addSubview(button)
+        
+        
+        // Create reset to default config button.
+        let resetConfigButton = UIButton(frame: CGRect(x: 160, y: 50, width: 125, height: 50))
+        resetConfigButton.backgroundColor = .systemGreen
+        resetConfigButton.setTitle("DEFAULT CONFIG", for: .normal)
+        resetConfigButton.tag = 0
+        resetConfigButton.addTarget(self, action: #selector(resetToDefaultConfig), for: .touchUpInside)
+        newView.addSubview(resetConfigButton)
+        
         
         // Create suggestion buttons for user.
         
@@ -402,9 +465,6 @@ class ViewController: UIViewController {
         
     }
     
-    
-    
-    // @TYH@
     func editConfigView() -> UIView {
         
         let configView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 1000))
@@ -416,9 +476,6 @@ class ViewController: UIViewController {
         backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         backButton.tag = 1
         configView.addSubview(backButton)
-        
-        // Retrieve currentlyEdittingButton's name and value
-            // This variable is changing too late.
         
         let key = String(currentlyEdittingButton) + "Button"
         
@@ -469,10 +526,58 @@ class ViewController: UIViewController {
         let saveConfig = UIButton(frame: CGRect(x: 100, y: 200, width: 100, height: 50))
         saveConfig.backgroundColor = .systemGreen
         saveConfig.setTitle("SUBMIT", for: .normal)
-        saveConfig.addTarget(self, action: #selector(saveToConfig), for: .touchUpInside)
+        saveConfig.addTarget(self, action: #selector(saveToConfigFromButton), for: .touchUpInside)
         configView.addSubview(saveConfig)
     
         return configView
+    }
+    
+    
+    ///
+    ///
+    /// UI Functions
+    ///
+    ///
+    @objc func saveToConfigFromButton(sender: UIButton) {
+        saveToConfig(sender: sender)
+        configView.removeFromSuperview()
+        viewDidLoad()
+    }
+    
+    @objc func resetToDefaultConfig(sender: UIButton) {
+        
+        if (sender.tag == 0){
+            
+            // Resetting buttons 1-4 to their default state.
+            buttonName = "1 Milk "
+            buttonValue = "7"
+            currentlyEdittingButton = 1
+            saveToConfig(sender: sender)
+            
+            buttonName = "2 Eggs/1 Yogurt "
+            buttonValue = "12"
+            currentlyEdittingButton = 2
+            saveToConfig(sender: sender)
+            
+            buttonName = "1 Whey "
+            buttonValue = "25"
+            currentlyEdittingButton = 3
+            saveToConfig(sender: sender)
+            
+            buttonName = "2 Bread "
+            buttonValue = "10"
+            currentlyEdittingButton = 4
+            saveToConfig(sender: sender)
+            
+            
+            
+        } else if (sender.tag == 1){
+            // TODO: Only reset specified button in currentlyEdittingButton
+            print("TODO")
+        } else {
+            print("unrecognized button tag")
+        }
+        
     }
     
     @objc func saveName(sender: UITextField!) {
@@ -490,8 +595,6 @@ class ViewController: UIViewController {
     
     @objc func saveToConfig(sender: UIButton!) {
         
-        
-        
         let buttonText = String(currentlyEdittingButton) + "Button" // Determine button we are editting.
         
         
@@ -505,8 +608,7 @@ class ViewController: UIViewController {
                 print("failed dict from String")
             }
         
-        configView.removeFromSuperview()
-        viewDidLoad()
+        
         
     }
     
@@ -605,6 +707,12 @@ class ViewController: UIViewController {
         
         viewDidLoad()
     }
+    
+    ///
+    ///
+    /// Helper Functions
+    ///
+    ///
     
     // Helper function for finding how much protein is in the title
     // E.g. "+1 test value (18g)" -> 18
