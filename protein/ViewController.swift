@@ -529,7 +529,7 @@ class ViewController: UIViewController {
             }
         }
         
-        let firstOutlet = UITextField(frame: CGRect(x: 100, y: 100, width: 150, height: 50))
+        let firstOutlet = UITextField(frame: CGRect(x: 115, y: 100, width: 150, height: 50))
         firstOutlet.textAlignment = NSTextAlignment.center
         firstOutlet.borderStyle = .roundedRect
         firstOutlet.text = retrievedName
@@ -539,7 +539,7 @@ class ViewController: UIViewController {
         
         
         // Create text outlet for config value
-        let textOutlet = UITextField(frame: CGRect(x: 100, y: 150, width: 150, height: 50))
+        let textOutlet = UITextField(frame: CGRect(x: 115, y: 150, width: 150, height: 50))
         textOutlet.textAlignment = NSTextAlignment.center
         textOutlet.borderStyle = .roundedRect
         textOutlet.keyboardType = .numberPad
@@ -555,7 +555,7 @@ class ViewController: UIViewController {
         saveValue(sender: textOutlet)
 
 
-        let saveConfig = UIButton(frame: CGRect(x: 100, y: 200, width: 100, height: 50))
+        let saveConfig = UIButton(frame: CGRect(x: 140, y: 220, width: 100, height: 50))
         saveConfig.backgroundColor = .systemGreen
         saveConfig.setTitle("SUBMIT", for: .normal)
         saveConfig.addTarget(self, action: #selector(saveToConfigFromButton), for: .touchUpInside)
