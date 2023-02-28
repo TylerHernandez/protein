@@ -345,9 +345,9 @@ class ViewController: UIViewController {
         
         
         // Create reset to default config button.
-        let resetConfigButton = UIButton(frame: CGRect(x: 160, y: 50, width: 125, height: 50))
+        let resetConfigButton = UIButton(frame: CGRect(x: 120, y: 50, width: 150, height: 50))
         resetConfigButton.backgroundColor = .systemGreen
-        resetConfigButton.setTitle("DEFAULT CONFIG", for: .normal)
+        resetConfigButton.setTitle("Reset Config", for: .normal)
         resetConfigButton.tag = 0
         resetConfigButton.addTarget(self, action: #selector(resetToDefaultConfig), for: .touchUpInside)
         newView.addSubview(resetConfigButton)
@@ -361,11 +361,19 @@ class ViewController: UIViewController {
         let defaultButtonWidth: CGFloat = 100
         
         // First button
+        var firstTitle = ""
+        
+        if (config.keys.contains("1Button")) {
+            if let val = config["1Button"] {
+                firstTitle = val
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: startingX, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemCyan // change color here.
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping // Allows new line text wrap.
         button.titleLabel?.textAlignment = NSTextAlignment.center // centers text for when line wraps.
-        button.setTitle("", for: .normal)
+        button.setTitle(firstTitle, for: .normal)
         button.tag = 1 // Send which button through tag
         button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
         newView.addSubview(button)
@@ -375,11 +383,19 @@ class ViewController: UIViewController {
         var currentX = previousX + separator
         
         // Second button
+        var secondTitle = ""
+        
+        if (config.keys.contains("2Button")) {
+            if let val = config["2Button"] {
+                secondTitle = val
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: currentX, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemMint
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("", for: .normal)
+        button.setTitle(secondTitle, for: .normal)
         button.tag = 2
         button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
         newView.addSubview(button)
@@ -389,11 +405,19 @@ class ViewController: UIViewController {
         currentX = previousX + separator
         
         // Third button
+        var thirdTitle = ""
+        
+        if (config.keys.contains("3Button")) {
+            if let val = config["3Button"] {
+                thirdTitle = val
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: previousX + separator, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemGreen
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("", for: .normal)
+        button.setTitle(thirdTitle, for: .normal)
         button.tag = 3
         button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
         newView.addSubview(button)
@@ -404,11 +428,19 @@ class ViewController: UIViewController {
         var currentY = previousY + separator
         
         // Fourth button
+        var fourthTitle = ""
+        
+        if (config.keys.contains("4Button")) {
+            if let val = config["4Button"] {
+                fourthTitle = val
+            }
+        }
+        
         button = UIButton(frame: CGRect(x: startingX, y: currentY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemRed
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
-        button.setTitle("", for: .normal)
+        button.setTitle(fourthTitle, for: .normal)
         button.tag = 4
         button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
         newView.addSubview(button)
@@ -538,12 +570,16 @@ class ViewController: UIViewController {
     /// UI Functions
     ///
     ///
+    
+    
+    // Calls saveToConfig then goes back to main page.
     @objc func saveToConfigFromButton(sender: UIButton) {
         saveToConfig(sender: sender)
         configView.removeFromSuperview()
         viewDidLoad()
     }
     
+    // Hard coded default values for user.
     @objc func resetToDefaultConfig(sender: UIButton) {
         
         if (sender.tag == 0){
