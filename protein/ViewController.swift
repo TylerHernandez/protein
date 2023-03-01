@@ -176,7 +176,7 @@ class ViewController: UIViewController {
             }
         }
         
-        button = UIButton(frame: CGRect(x: currentX, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
+        button = UIButton(frame: CGRect(x: currentX, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemMint
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
@@ -203,7 +203,7 @@ class ViewController: UIViewController {
             }
         }
         
-        button = UIButton(frame: CGRect(x: previousX + separator, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
+        button = UIButton(frame: CGRect(x: previousX + separator, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemGreen
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
@@ -375,7 +375,7 @@ class ViewController: UIViewController {
         button.titleLabel?.textAlignment = NSTextAlignment.center // centers text for when line wraps.
         button.setTitle(firstTitle, for: .normal)
         button.tag = 1 // Send which button through tag
-        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         newView.addSubview(button)
         
         
@@ -391,13 +391,13 @@ class ViewController: UIViewController {
             }
         }
         
-        button = UIButton(frame: CGRect(x: currentX, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
+        button = UIButton(frame: CGRect(x: currentX, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemMint
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
         button.setTitle(secondTitle, for: .normal)
         button.tag = 2
-        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         newView.addSubview(button)
         
         
@@ -413,13 +413,13 @@ class ViewController: UIViewController {
             }
         }
         
-        button = UIButton(frame: CGRect(x: previousX + separator, y: 130, width: defaultButtonWidth, height: defaultButtonHeight))
+        button = UIButton(frame: CGRect(x: previousX + separator, y: startingY, width: defaultButtonWidth, height: defaultButtonHeight))
         button.backgroundColor = .systemGreen
         button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         button.titleLabel?.textAlignment = NSTextAlignment.center
         button.setTitle(thirdTitle, for: .normal)
         button.tag = 3
-        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         newView.addSubview(button)
         
         // New Row
@@ -442,7 +442,7 @@ class ViewController: UIViewController {
         button.titleLabel?.textAlignment = NSTextAlignment.center
         button.setTitle(fourthTitle, for: .normal)
         button.tag = 4
-        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         newView.addSubview(button)
         
         previousX = button.frame.maxX
@@ -464,7 +464,7 @@ class ViewController: UIViewController {
         button.titleLabel?.textAlignment = NSTextAlignment.center
         button.setTitle(fifthTitle, for: .normal)
         button.tag = 5
-        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         newView.addSubview(button)
         
         previousX = button.frame.maxX
@@ -485,7 +485,7 @@ class ViewController: UIViewController {
         button.titleLabel?.textAlignment = NSTextAlignment.center
         button.setTitle(sixthTitle, for: .normal)
         button.tag = 6
-        button.addTarget(self, action: #selector(didSelectButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         newView.addSubview(button)
         
         previousY = button.frame.maxY
@@ -634,7 +634,7 @@ class ViewController: UIViewController {
     }
     
     // Mark down which button we are editting from sender, then display our config view.
-    @objc func didSelectButton(sender: UIButton!) {
+    @objc func didSelectConfigureButton(sender: UIButton!) {
         // Copy button from button's tag. E.g. 1 = first button.
         currentlyEdittingButton = sender.tag // Mark which button we are going to edit
         
@@ -667,7 +667,6 @@ class ViewController: UIViewController {
             configView.removeFromSuperview()
         } else if (sender.tag == 2) {
             transitionView.removeFromSuperview()
-            
         }
         
         viewDidLoad()
