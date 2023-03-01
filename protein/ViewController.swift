@@ -574,7 +574,7 @@ class ViewController: UIViewController {
     
     // Calls saveToConfig then goes back to main page.
     @objc func saveToConfigFromButton(sender: UIButton) {
-        saveToConfig(sender: sender)
+        saveToConfig()
         configView.removeFromSuperview()
         viewDidLoad()
     }
@@ -588,27 +588,31 @@ class ViewController: UIViewController {
             buttonName = "1 Milk "
             buttonValue = "7"
             currentlyEdittingButton = 1
-            saveToConfig(sender: sender)
+            saveToConfig()
             
             buttonName = "2 Eggs/1 Yogurt "
             buttonValue = "12"
             currentlyEdittingButton = 2
-            saveToConfig(sender: sender)
+            saveToConfig()
             
             buttonName = "1 Whey "
             buttonValue = "25"
             currentlyEdittingButton = 3
-            saveToConfig(sender: sender)
+            saveToConfig()
             
             buttonName = "2 Bread "
             buttonValue = "10"
             currentlyEdittingButton = 4
-            saveToConfig(sender: sender)
+            saveToConfig()
             
             
             
         } else if (sender.tag == 1){
             // TODO: Only reset specified button in currentlyEdittingButton
+            
+            
+            
+            
             print("TODO")
         } else {
             print("unrecognized button tag")
@@ -627,25 +631,6 @@ class ViewController: UIViewController {
         if let text = sender.text {
             buttonValue = text
         }
-    }
-    
-    @objc func saveToConfig(sender: UIButton!) {
-        
-        let buttonText = String(currentlyEdittingButton) + "Button" // Determine button we are editting.
-        
-        
-        let values = buttonName + "(" + buttonValue + "g)"
-        let text = "{\"" + buttonText + "\":\"" + values + "\"}"
-        
-            if let dict = dictFromString(str: text) {
-                config = config.merging(dict){ (_, new) in new } // merges config with new values in dict.
-                storeConfig(config: config)
-            } else {
-                print("failed dict from String")
-            }
-        
-        
-        
     }
     
     // Mark down which button we are editting from sender, then display our config view.
@@ -749,6 +734,22 @@ class ViewController: UIViewController {
     /// Helper Functions
     ///
     ///
+
+    // Saves pair {currentlyEdittingButton} : {name and value} into config.
+    func saveToConfig() {
+        
+        let buttonText = String(currentlyEdittingButton) + "Button" // Determine button we are editting.
+        
+        let values = buttonName + "(" + buttonValue + "g)"
+        let text = "{\"" + buttonText + "\":\"" + values + "\"}"
+        
+            if let dict = dictFromString(str: text) {
+                config = config.merging(dict){ (_, new) in new } // merges config with new values in dict.
+                storeConfig(config: config)
+            } else {
+                print("failed dict from String")
+            }
+    }
     
     // Helper function for finding how much protein is in the title
     // E.g. "+1 test value (18g)" -> 18
