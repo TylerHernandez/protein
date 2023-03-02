@@ -335,7 +335,7 @@ extension ViewController {
         let bounds = UIScreen.main.bounds
 //        let width = bounds.size.width
 //        let height = bounds.size.height
-        let configView = UIView(frame: CGRect(x: bounds.midX - 250, y: bounds.midY - 350 , width: 500, height: 700))
+        let configView = UIView(frame: CGRect(x: bounds.midX - 200, y: bounds.midY - 350 , width: 400, height: 700))
         
         // Create back button.
         let backButton = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
@@ -365,7 +365,7 @@ extension ViewController {
             }
         }
         
-        let firstOutlet = UITextField(frame: CGRect(x: 115, y: 100, width: 150, height: 50))
+        let firstOutlet = UITextField(frame: CGRect(x: 130, y: 100, width: 150, height: 50))
         firstOutlet.textAlignment = NSTextAlignment.center
         firstOutlet.borderStyle = .roundedRect
         firstOutlet.text = retrievedName
@@ -375,7 +375,7 @@ extension ViewController {
         
         
         // Create text outlet for config value
-        let textOutlet = UITextField(frame: CGRect(x: 115, y: 150, width: 150, height: 50))
+        let textOutlet = UITextField(frame: CGRect(x: 130, y: 150, width: 150, height: 50))
         textOutlet.textAlignment = NSTextAlignment.center
         textOutlet.borderStyle = .roundedRect
         textOutlet.keyboardType = .numberPad
@@ -391,8 +391,9 @@ extension ViewController {
         saveValue(sender: textOutlet)
 
 
-        let saveConfig = UIButton(frame: CGRect(x: 140, y: 220, width: 100, height: 50))
+        let saveConfig = UIButton(frame: CGRect(x: 130, y: 220, width: 150, height: 50))
         saveConfig.backgroundColor = .systemGreen
+        saveConfig.titleLabel?.textAlignment = .center
         saveConfig.setTitle("SUBMIT", for: .normal)
         saveConfig.addTarget(self, action: #selector(saveToConfigFromButton), for: .touchUpInside)
         configView.addSubview(saveConfig)
