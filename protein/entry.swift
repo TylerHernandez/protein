@@ -82,9 +82,11 @@ extension ViewController {
     
     func addEntryView() -> UIView  {
         
+        let bounds = UIScreen.main.bounds
+//        let width = bounds.size.width
+//        let height = bounds.size.height
         let separator: CGFloat = 20
-        
-        let newView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 700))
+        let newView = UIView(frame: CGRect(x: bounds.midX - 200, y: bounds.midY - 350, width: 400, height: 700))
         
         // Create a back button.
         var button = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
@@ -95,8 +97,7 @@ extension ViewController {
         newView.addSubview(button)
         
         // Create suggestion buttons for user.
-        
-        let startingX: CGFloat = 25
+        let startingX: CGFloat = 30
         let startingY: CGFloat = 130
         let defaultButtonHeight: CGFloat = 100
         let defaultButtonWidth: CGFloat = 100
