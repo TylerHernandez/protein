@@ -25,28 +25,33 @@ extension ViewController {
     // TODO: change background color of app based on totalSum.
     func refreshViewContainer() -> UIView{
         totalSum = 0 // Reset totalSum since we're going to recompute it below.
-        let newView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 400))
+        
+        let bounds = UIScreen.main.bounds
+        let width = bounds.size.width
+        let height = bounds.size.height
+        
+        let homeView: UIView = UIView(frame: CGRect(x: bounds.minX, y: bounds.minY + 10, width: width, height: height))
         
         // Create clear list button.
         let clearListButton = UIButton(frame: CGRect(x: 10, y: 50, width: 50, height: 50))
         clearListButton.backgroundColor = .systemRed
         clearListButton.setTitle("-", for: .normal)
         clearListButton.addTarget(self, action: #selector(clearList), for: .touchUpInside)
-        newView.addSubview(clearListButton)
+        homeView.addSubview(clearListButton)
         
         // Create Edit Config button.
-        let configButton = UIButton(frame: CGRect(x: 160, y: 50, width: 50, height: 50))
+        let configButton = UIButton(frame: CGRect(x: bounds.midX - 25, y: 50, width: 50, height: 50))
         configButton.backgroundColor = .systemGreen
         configButton.setTitle("!", for: .normal)
         configButton.addTarget(self, action: #selector(editConfigButton), for: .touchUpInside)
-        newView.addSubview(configButton)
+        homeView.addSubview(configButton)
         
         // Create Add Entry button.
-        let entryButton = UIButton(frame: CGRect(x: 325, y: 50, width: 50, height: 50))
+        let entryButton = UIButton(frame: CGRect(x: (bounds.maxX - 10) - 50, y: 50, width: 50, height: 50))
         entryButton.backgroundColor = .systemBlue
         entryButton.setTitle("+", for: .normal)
         entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
-        newView.addSubview(entryButton)
+        homeView.addSubview(entryButton)
         
         
         var label = UILabel()
@@ -56,19 +61,19 @@ extension ViewController {
             label = UILabel(frame: CGRect(x: 30, y: 130 + separator, width: 50, height: 50))
             label.text = String(item)
             separator += 20
-            newView.addSubview(label)
+            homeView.addSubview(label)
             totalSum += item
         }
         // Display sum line
         label = UILabel(frame: CGRect(x: 10, y: 130 + separator, width: 300, height: 50))
         label.text = "--------------------------------"
-        newView.addSubview(label)
+        homeView.addSubview(label)
         separator += 20
         
         // Display sum
         label = UILabel(frame: CGRect(x: 30, y: 130 + separator, width: 100, height: 50))
         label.text = String(totalSum) + " grams"
-        newView.addSubview(label)
-        return newView
+        homeView.addSubview(label)
+        return homeView
     }
 }

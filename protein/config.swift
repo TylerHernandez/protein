@@ -300,7 +300,6 @@ extension ViewController {
         currentX = previousX + separator
         
         // Sixth Button
-        
         var sixthTitle = ""
         
         if (config.keys.contains("6Button")) {
@@ -331,7 +330,6 @@ extension ViewController {
     
     func editConfigView() -> UIView {
         
-        // TODO: Fix layout here.
         let bounds = UIScreen.main.bounds
 //        let width = bounds.size.width
 //        let height = bounds.size.height
