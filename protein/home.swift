@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 extension ViewController {
     
@@ -21,6 +22,10 @@ extension ViewController {
         viewDidLoad()
     }
     
+    @objc func viewHistory() {
+        let swiftUIViewController = UIHostingController(rootView: SwiftUIView(navigationController: self.navigationController))
+            self.navigationController?.pushViewController(swiftUIViewController, animated: true)
+        }
     
     // TODO: change background color of app based on totalSum.
     func refreshViewContainer() -> UIView{
@@ -53,26 +58,40 @@ extension ViewController {
         entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
         homeView.addSubview(entryButton)
         
+        // Create calendar view button.
+        let historyButton = UIButton(frame: CGRect(x: bounds.midX - 25, y: 100, width: 50, height: 50))
+        historyButton.backgroundColor = .systemGreen
+        historyButton.setTitle("*", for: .normal)
+        historyButton.addTarget(self, action: #selector(viewHistory), for: .touchUpInside)
+        homeView.addSubview(historyButton)
+        
+        // TODO: use a table view to display our entries
+        //let tableView = UITableView()
         
         var label = UILabel()
         // Retrieve list
-        var separator = 20 // start off separator at 20, then continuously add to push down our list.
+        var separator = 30 // start off separator at 30, then continuously add to push down our list.
         for item in listOfEntries{
-            label = UILabel(frame: CGRect(x: 30, y: 130 + separator, width: 50, height: 50))
+            // 90 to leave space for our total label - nvm this will not move once we add our table view
+//            if(separator + 90 > )
+            label = UILabel(frame: CGRect(x: 70, y: 150 + separator, width: 50, height: 50))
             label.text = String(item)
-            separator += 20
+            label.font = label.font.withSize(25)
+            separator += 30
             homeView.addSubview(label)
             totalSum += item
         }
         // Display sum line
-        label = UILabel(frame: CGRect(x: 10, y: 130 + separator, width: 300, height: 50))
-        label.text = "--------------------------------"
+        label = UILabel(frame: CGRect(x: 70, y: 150 + separator, width: 50, height: 50))
+        label.text = "----"
+        label.font = label.font.withSize(25)
         homeView.addSubview(label)
         separator += 20
         
         // Display sum
-        label = UILabel(frame: CGRect(x: 30, y: 130 + separator, width: 100, height: 50))
+        label = UILabel(frame: CGRect(x: 70, y: 150 + separator, width: 150, height: 50))
         label.text = String(totalSum) + " grams"
+        label.font = label.font.withSize(25)
         homeView.addSubview(label)
         return homeView
     }
