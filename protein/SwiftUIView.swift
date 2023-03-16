@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+extension DateComponents: Comparable {
+    public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
+        let now = Date()
+        let calendar = Calendar.current
+        return calendar.date(byAdding: lhs, to: now)! < calendar.date(byAdding: rhs, to: now)!
+    }
+}
+
 struct datePicker: View {
     @Environment(\.calendar) var calendar
     @Environment(\.timeZone) var timeZone
@@ -34,23 +42,13 @@ struct datePicker: View {
             MultiDatePicker("Dates Available", selection: $dates, in: bounds)
                 .fixedSize()
             
-//            for date in dates {
-//                Text(date.day!)
-//            }
-            
-            // TODO: Prevent text from overflowing screen.
-            Text(datesSelected)
-                .fixedSize()
+            List {
+                ForEach(dates.sorted(), id: \.self) { date in
+                    Text(String(date.month!) + "/" + String(date.day!) + "/" + String(date.year!))
+                }
+            }
         }
-    }
-    
-    var datesSelected: String {
-        var str = ""
         
-        for date in dates {
-            str += String(date.day!) + "\n"
-        }
-        return str
     }
 }
 
@@ -61,7 +59,7 @@ struct SwiftUIView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("Calendar Screen")
+                Text("Calendar")
                     .bold()
                     .font(.system(size: 21.0))
             }
