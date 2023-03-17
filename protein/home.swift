@@ -45,11 +45,18 @@ extension ViewController {
         homeView.addSubview(clearListButton)
         
         // Create Edit Config button.
-        let configButton = UIButton(frame: CGRect(x: bounds.midX - 25, y: 50, width: 50, height: 50))
+        let configButton = UIButton(frame: CGRect(x: (bounds.midX/2) - 25, y: 50, width: 50, height: 50))
         configButton.backgroundColor = .systemGreen
         configButton.setTitle("!", for: .normal)
         configButton.addTarget(self, action: #selector(editConfigButton), for: .touchUpInside)
         homeView.addSubview(configButton)
+        
+        // Create calendar view button.
+        let historyButton = UIButton(frame: CGRect(x: (bounds.midX + (bounds.midX / 2)) - 25, y: 50, width: 50, height: 50))
+        historyButton.backgroundColor = .systemGreen
+        historyButton.setTitle("*", for: .normal)
+        historyButton.addTarget(self, action: #selector(viewHistory), for: .touchUpInside)
+        homeView.addSubview(historyButton)
         
         // Create Add Entry button.
         let entryButton = UIButton(frame: CGRect(x: (bounds.maxX - 10) - 50, y: 50, width: 50, height: 50))
@@ -58,12 +65,6 @@ extension ViewController {
         entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
         homeView.addSubview(entryButton)
         
-        // Create calendar view button.
-        let historyButton = UIButton(frame: CGRect(x: bounds.midX - 25, y: 100, width: 50, height: 50))
-        historyButton.backgroundColor = .systemGreen
-        historyButton.setTitle("*", for: .normal)
-        historyButton.addTarget(self, action: #selector(viewHistory), for: .touchUpInside)
-        homeView.addSubview(historyButton)
         
         // TODO: use a table view to display our entries
         //let tableView = UITableView()

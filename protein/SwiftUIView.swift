@@ -44,6 +44,8 @@ struct datePicker: View {
             
             List {
                 ForEach(dates.sorted(), id: \.self) { date in
+                    
+                    // TODO: Retrieve protein count for said date.
                     Text(String(date.month!) + "/" + String(date.day!) + "/" + String(date.year!))
                 }
             }
