@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  calendarView.swift
 //  protein
 //
 //  Created by Tyler Hernandez on 3/13/23.
@@ -45,16 +45,29 @@ struct datePicker: View {
             List {
                 ForEach(dates.sorted(), id: \.self) { date in
                     
-                    // TODO: Retrieve protein count for said date.
-                    Text(String(date.month!) + "/" + String(date.day!) + "/" + String(date.year!))
+                    Text( "\((date.date ?? Date.now).formatted(date: .long, time: .omitted)):  \(loadListFromStorage(date: date.date ?? Date.now)) grams")
                 }
             }
         }
         
     }
+    
+    func loadListFromStorage(date: Date) -> String {
+
+        let defaults = UserDefaults.standard
+
+        let key = (date.formatted(date: .long, time: .omitted))
+
+        if let storedIntake = defaults.string(forKey: key) {
+            return storedIntake
+        } else {
+            return "unrecorded"
+        }
+    }
+    
 }
 
-struct SwiftUIView: View {
+struct calendarView: View {
 
     weak var navigationController: UINavigationController?
 
@@ -88,8 +101,8 @@ struct SwiftUIView: View {
     } // ends view
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct calendarView_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUIView()
+        calendarView()
     }
 }

@@ -23,8 +23,13 @@ extension ViewController {
     }
     
     @objc func viewHistory() {
-        let swiftUIViewController = UIHostingController(rootView: SwiftUIView(navigationController: self.navigationController))
-            self.navigationController?.pushViewController(swiftUIViewController, animated: true)
+        let calendarViewController = UIHostingController(rootView: calendarView(navigationController: self.navigationController))
+            self.navigationController?.pushViewController(calendarViewController, animated: true)
+        }
+    
+    @objc func viewSaveProtein() {
+        let saveProteinViewController = UIHostingController(rootView: saveProteinView(navigationController: self.navigationController, intake: totalSum))
+            self.navigationController?.pushViewController(saveProteinViewController, animated: true)
         }
     
     // TODO: change background color of app based on totalSum.
@@ -50,6 +55,13 @@ extension ViewController {
         configButton.setTitle("!", for: .normal)
         configButton.addTarget(self, action: #selector(editConfigButton), for: .touchUpInside)
         homeView.addSubview(configButton)
+        
+        // Create Save Protein.
+        let saveButton = UIButton(frame: CGRect(x: (bounds.midX) - 25, y: 50, width: 50, height: 50))
+        saveButton.backgroundColor = .systemGreen
+        saveButton.setTitle("S", for: .normal)
+        saveButton.addTarget(self, action: #selector(viewSaveProtein), for: .touchUpInside)
+        homeView.addSubview(saveButton)
         
         // Create calendar view button.
         let historyButton = UIButton(frame: CGRect(x: (bounds.midX + (bounds.midX / 2)) - 25, y: 50, width: 50, height: 50))
