@@ -25,7 +25,6 @@ struct saveProteinView: View {
                     .font(.system(size: 21.0))
             }
             
-            // TODO: Select a date and retrieve current protein count.
             
             VStack {
                 DatePicker(selection: $date, in: ...Date.now, displayedComponents: .date) {

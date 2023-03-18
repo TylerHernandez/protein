@@ -42,17 +42,66 @@ struct datePicker: View {
             MultiDatePicker("Dates Available", selection: $dates, in: bounds)
                 .fixedSize()
             
+            
             List {
                 ForEach(dates.sorted(), id: \.self) { date in
                     
-                    Text( "\((date.date ?? Date.now).formatted(date: .long, time: .omitted)):  \(loadListFromStorage(date: date.date ?? Date.now)) grams")
+                    let grams = loadProteinFromStorage(date: date.date ?? Date.now)
+                    
+                    Text("\((date.date ?? Date.now).formatted(date: .long, time: .omitted)):  \(grams) grams")
+                    
                 }
             }
+            
+            Text("total sum across \(countEntriesWithValues()) entries: \(sumEntries())")
+            
+            Text("Average:  \(retrieveAverageFromSelected())")
         }
         
     }
     
-    func loadListFromStorage(date: Date) -> String {
+    
+    func retrieveAverageFromSelected() -> Int {
+        var count = 0
+        var length = 0
+        for d in Array(dates) {
+            
+            if let value = Int(loadProteinFromStorage(date: d.date!)){
+                count += value
+                length += 1
+            }
+        }
+        
+        guard length > 0 else {
+            return 0
+        }
+        
+        return (count / length)
+    }
+    
+    func countEntriesWithValues() -> Int {
+        var count = 0
+        for d in Array(dates) {
+            
+            if ("0" != loadProteinFromStorage(date: d.date ?? Date.now)) {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    func sumEntries() -> Int {
+        var count = 0
+        for d in Array(dates) {
+            
+            let value = Int(loadProteinFromStorage(date: d.date!)) ?? 0
+                
+                count += value
+        }
+        return count
+    }
+    
+    func loadProteinFromStorage(date: Date) -> String {
 
         let defaults = UserDefaults.standard
 
@@ -61,7 +110,7 @@ struct datePicker: View {
         if let storedIntake = defaults.string(forKey: key) {
             return storedIntake
         } else {
-            return "unrecorded"
+            return "0"
         }
     }
     
