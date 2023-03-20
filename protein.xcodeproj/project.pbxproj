@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		622CB36429C4D003003B9559 /* saveProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CB36329C4D003003B9559 /* saveProteinView.swift */; };
+		622CB36629C8EE24003B9559 /* entryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CB36529C8EE24003B9559 /* entryView.swift */; };
 		627ECB7028E5F87B00C4CDBD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB6F28E5F87B00C4CDBD /* AppDelegate.swift */; };
 		627ECB7428E5F87B00C4CDBD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB7328E5F87B00C4CDBD /* ViewController.swift */; };
 		627ECB7928E5F87C00C4CDBD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 627ECB7828E5F87C00C4CDBD /* Assets.xcassets */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		622CB36329C4D003003B9559 /* saveProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = saveProteinView.swift; sourceTree = "<group>"; };
+		622CB36529C8EE24003B9559 /* entryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entryView.swift; sourceTree = "<group>"; };
 		627ECB6C28E5F87A00C4CDBD /* protein.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = protein.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		627ECB6F28E5F87B00C4CDBD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		627ECB7328E5F87B00C4CDBD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				627ECB6F28E5F87B00C4CDBD /* AppDelegate.swift */,
 				627ECB7328E5F87B00C4CDBD /* ViewController.swift */,
 				62D082E129BEE09700E604BD /* calendarView.swift */,
+				622CB36529C8EE24003B9559 /* entryView.swift */,
 				62AEE83829AF130700754080 /* home.swift */,
 				622CB36329C4D003003B9559 /* saveProteinView.swift */,
 				62AEE83629AF126400754080 /* entry.swift */,
@@ -269,6 +272,7 @@
 				627ECB7428E5F87B00C4CDBD /* ViewController.swift in Sources */,
 				627ECB7028E5F87B00C4CDBD /* AppDelegate.swift in Sources */,
 				62AEE83929AF130700754080 /* home.swift in Sources */,
+				622CB36629C8EE24003B9559 /* entryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -34,31 +34,34 @@ struct saveProteinView: View {
                 
                 
                 Text("Selected Date: \(date.formatted(date: .long, time: .omitted))")
-                    }
+            }
             
             Text("Intake: \(intake ?? 0) grams")
             
             Button ("Save") {
                 saveProteinToStorage()
             }.fixedSize()
-
-            Spacer()
-                .frame(width: 1, height: 74, alignment: .bottom)
-            VStack(alignment: .center){
-                Button(action: {
-                    navigationController?.popViewController(animated: true)
-                }) {
-                    Text("Back to UIKit")
-                        .font(.system(size: 21.0))
-                        .bold()
-                        .frame(width: UIScreen.main.bounds.width, height: 10, alignment: .center)
-                }
-            }
             
             Spacer()
-                .frame(width: 2, height: 105, alignment: .bottom)
-        }.navigationBarHidden(true) // Need to keep this hidden or navigation controller blocks other buttons.
-    }
+                .frame(width: 1, height: 74, alignment: .bottom)
+            
+        }.navigationBarHidden(false) // Need to keep this hidden or navigation controller blocks other buttons.
+            .navigationBarBackButtonHidden(true)
+            .navigationTitle("Save Protein")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        navigationController?.popViewController(animated: true)
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                }
+            } // ends toolbar.
+        
+    }// ends body.
     
     func saveProteinToStorage() {
         

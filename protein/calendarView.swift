@@ -53,7 +53,7 @@ struct datePicker: View {
                 }
             }
             
-            Text("total sum across \(countEntriesWithValues()) entries: \(sumEntries())")
+            Text("total sum across \(dates.count) entries: \(sumEntries())")
             
             Text("Average:  \(retrieveAverageFromSelected())")
         }
@@ -77,17 +77,6 @@ struct datePicker: View {
         }
         
         return (count / length)
-    }
-    
-    func countEntriesWithValues() -> Int {
-        var count = 0
-        for d in Array(dates) {
-            
-            if ("0" != loadProteinFromStorage(date: d.date ?? Date.now)) {
-                count += 1
-            }
-        }
-        return count
     }
     
     func sumEntries() -> Int {
@@ -122,30 +111,28 @@ struct calendarView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Text("Calendar")
-                    .bold()
-                    .font(.system(size: 21.0))
-            }
 
             datePicker()
 
             Spacer()
                 .frame(width: 1, height: 74, alignment: .bottom)
-            VStack(alignment: .center){
-                Button(action: {
-                    navigationController?.popViewController(animated: true)
-                }) {
-                    Text("Back to UIKit")
-                        .font(.system(size: 21.0))
-                        .bold()
-                        .frame(width: UIScreen.main.bounds.width, height: 10, alignment: .center)
-                }
-            }
             
-            Spacer()
-                .frame(width: 2, height: 105, alignment: .bottom)
-        }.navigationBarHidden(true) // Need to keep this hidden or navigation controller blocks other buttons.
+        }
+            .navigationBarHidden(false)
+            .navigationBarBackButtonHidden(true)
+            .navigationTitle("Calendar View")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        navigationController?.popViewController(animated: true)
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                }
+            } // ends toolbar.
         
     } // ends view
 }
