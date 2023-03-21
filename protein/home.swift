@@ -32,8 +32,15 @@ extension ViewController {
             self.navigationController?.pushViewController(saveProteinViewController, animated: true)
         }
     
+    @objc func viewEntryView() {
+        print("view entry view")
+        let entryViewController = UIHostingController(rootView: protein.entryView(navigationController: self.navigationController, config: config))
+            self.navigationController?.pushViewController(entryViewController, animated: true)
+        }
+    
     // TODO: change background color of app based on totalSum.
     func refreshViewContainer() -> UIView{
+        print("refreshed")
         totalSum = 0 // Reset totalSum since we're going to recompute it below.
         
         let bounds = UIScreen.main.bounds
@@ -74,7 +81,7 @@ extension ViewController {
         let entryButton = UIButton(frame: CGRect(x: (bounds.maxX - 10) - 50, y: 50, width: 50, height: 50))
         entryButton.backgroundColor = .systemBlue
         entryButton.setTitle("+", for: .normal)
-        entryButton.addTarget(self, action: #selector(addEntryButton), for: .touchUpInside)
+        entryButton.addTarget(self, action: #selector(viewEntryView), for: .touchUpInside) // addEntryButton
         homeView.addSubview(entryButton)
         
         

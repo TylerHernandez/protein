@@ -35,6 +35,7 @@ class ViewController: UIViewController {
     var transitionView: UIView = UIView()
     
     override func viewDidLoad() {
+        print("view did load")
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
