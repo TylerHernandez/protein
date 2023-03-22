@@ -12,7 +12,6 @@ extension ViewController {
     
     @objc func addQuickEntry(sender: UIButton!) {
         let grams = sender.tag // Copy protein amount from button's tag. Default value = 0.
-        t
         guard (grams > 0) else { return }
         
         // Immitate sending from our textOutlet.

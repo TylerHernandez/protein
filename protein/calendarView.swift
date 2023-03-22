@@ -107,8 +107,6 @@ struct datePicker: View {
 
 struct calendarView: View {
 
-    weak var navigationController: UINavigationController?
-
     var body: some View {
         VStack {
 
@@ -119,20 +117,8 @@ struct calendarView: View {
             
         }
             .navigationBarHidden(false)
-            .navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden(false)
             .navigationTitle("Calendar View")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        navigationController?.popViewController(animated: true)
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
-                        }
-                    }
-                }
-            } // ends toolbar.
         
     } // ends view
 }

@@ -9,11 +9,6 @@ import UIKit
 import SwiftUI
 
 
-struct DefaultsKeys {
-    static let entryKey = "this_is_my_key"
-    static let configKey = "this_is_my_config_key"
-}
-
 
 class ViewController: UIViewController {
     

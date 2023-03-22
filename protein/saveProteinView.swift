@@ -9,7 +9,7 @@ import SwiftUI
 
 struct saveProteinView: View {
     
-    weak var navigationController: UINavigationController?
+    //weak var navigationController: UINavigationController?
     
     // Retrieve current protein intake from home page.
     var intake: Int?
@@ -46,20 +46,7 @@ struct saveProteinView: View {
                 .frame(width: 1, height: 74, alignment: .bottom)
             
         }.navigationBarHidden(false) // Need to keep this hidden or navigation controller blocks other buttons.
-            .navigationBarBackButtonHidden(true)
-            .navigationTitle("Save Protein")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        navigationController?.popViewController(animated: true)
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
-                        }
-                    }
-                }
-            } // ends toolbar.
+            .navigationBarBackButtonHidden(false)
         
     }// ends body.
     

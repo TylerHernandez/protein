@@ -23,18 +23,18 @@ extension ViewController {
     }
     
     @objc func viewHistory() {
-        let calendarViewController = UIHostingController(rootView: calendarView(navigationController: self.navigationController))
+        let calendarViewController = UIHostingController(rootView: calendarView())
             self.navigationController?.pushViewController(calendarViewController, animated: true)
         }
     
     @objc func viewSaveProtein() {
-        let saveProteinViewController = UIHostingController(rootView: saveProteinView(navigationController: self.navigationController, intake: totalSum))
+        let saveProteinViewController = UIHostingController(rootView: saveProteinView( intake: totalSum))
             self.navigationController?.pushViewController(saveProteinViewController, animated: true)
         }
     
     @objc func viewEntryView() {
         print("view entry view")
-        let entryViewController = UIHostingController(rootView: protein.entryView(navigationController: self.navigationController, config: config))
+        let entryViewController = UIHostingController(rootView: protein.entryView())
             self.navigationController?.pushViewController(entryViewController, animated: true)
         }
     

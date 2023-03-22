@@ -19,6 +19,8 @@
 		62AEE83729AF126400754080 /* entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEE83629AF126400754080 /* entry.swift */; };
 		62AEE83929AF130700754080 /* home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AEE83829AF130700754080 /* home.swift */; };
 		62D082E229BEE09700E604BD /* calendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D082E129BEE09700E604BD /* calendarView.swift */; };
+		62DDDCAD29CA36040066A932 /* homeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DDDCAC29CA36040066A932 /* homeView.swift */; };
+		62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DDDCAE29CA47440066A932 /* proteinApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,8 @@
 		62AEE83629AF126400754080 /* entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entry.swift; sourceTree = "<group>"; };
 		62AEE83829AF130700754080 /* home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = home.swift; sourceTree = "<group>"; };
 		62D082E129BEE09700E604BD /* calendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarView.swift; sourceTree = "<group>"; };
+		62DDDCAC29CA36040066A932 /* homeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeView.swift; sourceTree = "<group>"; };
+		62DDDCAE29CA47440066A932 /* proteinApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 		627ECB6E28E5F87B00C4CDBD /* protein */ = {
 			isa = PBXGroup;
 			children = (
+				62DDDCAE29CA47440066A932 /* proteinApp.swift */,
+				62DDDCAC29CA36040066A932 /* homeView.swift */,
 				627ECB6F28E5F87B00C4CDBD /* AppDelegate.swift */,
 				627ECB7328E5F87B00C4CDBD /* ViewController.swift */,
 				62D082E129BEE09700E604BD /* calendarView.swift */,
@@ -271,8 +277,10 @@
 				62AEE83729AF126400754080 /* entry.swift in Sources */,
 				627ECB7428E5F87B00C4CDBD /* ViewController.swift in Sources */,
 				627ECB7028E5F87B00C4CDBD /* AppDelegate.swift in Sources */,
+				62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */,
 				62AEE83929AF130700754080 /* home.swift in Sources */,
 				622CB36629C8EE24003B9559 /* entryView.swift in Sources */,
+				62DDDCAD29CA36040066A932 /* homeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
