@@ -15,6 +15,8 @@ struct entryView: View {
     
     @State private var removal: String = ""
     
+    @State private var showPopup = false
+    
     var body: some View {
         
         VStack {
@@ -24,6 +26,7 @@ struct entryView: View {
                     removeOldEntry(grams: item)
                 }
                 print("Removing all entries from list")
+                showPopup = true
             } .padding(10)
                 .frame(width: 110, height: 100, alignment: .center )
                 .font(.system(size: 18))
@@ -36,38 +39,41 @@ struct entryView: View {
                 
                 Button(globalString.config["1Button"] ?? "1Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "") ?? 0)
+                    showPopup = true
                 }
-                    .padding(10)
-                    .frame(width: 110, height: 100, alignment: .center )
-                    .font(.system(size: 18))
-                    .buttonStyle(.bordered)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.blue)
+                .padding(10)
+                .frame(width: 110, height: 100, alignment: .center )
+                .font(.system(size: 18))
+                .buttonStyle(.bordered)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.blue)
                 
                 Spacer()
                 
                 Button(globalString.config["2Button"] ?? "2Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "") ?? 0)
+                    showPopup = true
                 }
-                    .padding(10)
-                    .frame(width: 110, height: 100, alignment: .center )
-                    .font(.system(size: 18))
-                    .buttonStyle(.bordered)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.red)
+                .padding(10)
+                .frame(width: 110, height: 100, alignment: .center )
+                .font(.system(size: 18))
+                .buttonStyle(.bordered)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.red)
                 
                 
                 Spacer()
                 
                 Button(globalString.config["3Button"] ?? "3Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "") ?? 0)
+                    showPopup = true
                 }
-                    .padding(10)
-                    .frame(width: 110, height: 100, alignment: .center )
-                    .font(.system(size: 18))
-                    .buttonStyle(.bordered)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.green)
+                .padding(10)
+                .frame(width: 110, height: 100, alignment: .center )
+                .font(.system(size: 18))
+                .buttonStyle(.bordered)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.green)
                 
                 Spacer()
             } // Hstack 1
@@ -75,51 +81,57 @@ struct entryView: View {
                 Spacer()
                 Button(globalString.config["4Button"] ?? "4Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "") ?? 0)
+                    showPopup = true
                 }
-                    .padding(10)
-                    .frame(width: 110, height: 100, alignment: .center )
-                    .font(.system(size: 18))
-                    .buttonStyle(.bordered)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.yellow)
+                .padding(10)
+                .frame(width: 110, height: 100, alignment: .center )
+                .font(.system(size: 18))
+                .buttonStyle(.bordered)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.yellow)
                 
                 Spacer()
                 Button(globalString.config["5Button"] ?? "5Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "") ?? 0)
+                    showPopup = true
                 }
-                    .padding(10)
-                    .frame(width: 110, height: 100, alignment: .center )
-                    .font(.system(size: 18))
-                    .buttonStyle(.bordered)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.orange)
+                .padding(10)
+                .frame(width: 110, height: 100, alignment: .center )
+                .font(.system(size: 18))
+                .buttonStyle(.bordered)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.orange)
                 
                 Spacer()
                 Button(globalString.config["6Button"] ?? "6Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "") ?? 0)
+                    showPopup = true
                 }
-                    .padding(10)
-                    .frame(width: 110, height: 100, alignment: .center )
-                    .font(.system(size: 18))
-                    .buttonStyle(.bordered)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.purple)
+                .padding(10)
+                .frame(width: 110, height: 100, alignment: .center )
+                .font(.system(size: 18))
+                .buttonStyle(.bordered)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.purple)
                 
                 Spacer()
             } // Hstack 2
-                
+            
             Spacer().frame(width: 1, height: 60, alignment: .bottom)
             VStack{
                 TextField("Entry Here", text: $entry).frame(width: CGFloat(100), height: CGFloat(30), alignment: .center).onSubmit {
                     addQuickEntry(grams: Int(entry) ?? 0)
-                    print("Added \(entry)")
+                    showPopup = true
+                    entry = ""
+                    
                 }
                 TextField("Remove Here", text: $removal).frame(width: CGFloat(120), height: CGFloat(30), alignment: .center).onSubmit {
                     removeOldEntry(grams: Int(removal) ?? 0)
-                    print("Removed \(entry)")
+                    showPopup = true
+                    removal = ""
                 }
             } // Vstack 2
-            
+
         } // Vstack 1
             .navigationBarHidden(false)
             .navigationBarBackButtonHidden(false)
@@ -128,6 +140,17 @@ struct entryView: View {
                 // Need to reload string with most up to date listOfEntries or it will be empty.
                 globalString.reload()
             }
+            .popover(isPresented: $showPopup) {
+                ZStack {
+                    Button("Submitted!") {
+                        showPopup = false
+                    }
+                        .font(.system(size: 25))
+                        .buttonStyle(.borderedProminent)
+                        .tint(.green)
+                }.background(BackgroundBlurView())
+            }
+        
     }
      
     
@@ -135,6 +158,7 @@ struct entryView: View {
         if grams > 0 { // these nums will never be added.
             if let index = globalString.listOfEntries.lastIndex(of: grams) {
                 globalString.listOfEntries.remove(at: index)
+                print("Removed \(grams)")
             }
         }
 
@@ -147,6 +171,8 @@ struct entryView: View {
         guard (grams > 0) else { return }
         globalString.listOfEntries.append(grams)
         saveListToStorage()
+        
+        print("Added \(grams)")
     }
     
     func saveListToStorage() {
@@ -182,6 +208,18 @@ struct entryView: View {
         return Int(protein)
     }
     
+}
+
+struct BackgroundBlurView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 struct entryView_Previews: PreviewProvider {
