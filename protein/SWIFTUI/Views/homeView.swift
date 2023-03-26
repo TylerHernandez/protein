@@ -13,7 +13,7 @@ struct DefaultsKeys {
 }
 
 class GlobalString: ObservableObject {
-    @Published var listOfEntries: [Int]
+    @Published var listOfEntries: [Entry]
     
     @Published var config : Dictionary<String, String>
     
@@ -30,7 +30,7 @@ class GlobalString: ObservableObject {
     func intake() -> Int {
         var sum = 0
         for item in listOfEntries {
-            sum += item
+            sum += item.grams
         }
         return sum
     }
@@ -57,7 +57,7 @@ class GlobalString: ObservableObject {
         return nil
     }
     
-    func loadListFromStorage() -> [Int] {
+    func loadListFromStorage() -> [Entry] {
         
         let defaults = UserDefaults.standard
         
@@ -67,11 +67,11 @@ class GlobalString: ObservableObject {
         return []
     }
     
-    func toList(str: String) -> [Int] {
-        var newList: [Int] = []
+    func toList(str: String) -> [Entry] {
+        var newList: [Entry] = []
         
         for item in str.components(separatedBy: ["+"]){
-            if let itemInt = Int(item) {newList.append(itemInt)} else { return newList }
+            if let itemInt = Int(item) {newList.append(Entry(grams: itemInt))} else { return newList }
         }
         
         return newList
@@ -107,8 +107,8 @@ struct homeView: View {
                 //Spacer()
                 
                 List {
-                    ForEach(globalString.listOfEntries, id: \.self) { entry in
-                        Text("\(entry)")
+                    ForEach(globalString.listOfEntries, id: \.id) { entry in
+                        Text("\(entry.grams)")
                     }
                 }.onAppear {
                     globalString.reload()
@@ -127,7 +127,7 @@ struct homeView: View {
     func totalSum() -> Int {
         var sum = 0
         for x in globalString.listOfEntries {
-            sum += x
+            sum += x.grams
         }
         return sum
     }

@@ -23,7 +23,7 @@ struct entryView: View {
             
             Button("Remove All"){
                 for item in globalString.listOfEntries {
-                    removeOldEntry(grams: item)
+                    removeOldEntry(grams: item.grams)
                 }
                 print("Removing all entries from list")
                 showPopup = true
@@ -156,7 +156,7 @@ struct entryView: View {
     
     func removeOldEntry(grams: Int) {
         if grams > 0 { // these nums will never be added.
-            if let index = globalString.listOfEntries.lastIndex(of: grams) {
+            if let index = globalString.listOfEntries.findEntry(Entry: grams) {
                 globalString.listOfEntries.remove(at: index)
                 print("Removed \(grams)")
             }
@@ -169,7 +169,7 @@ struct entryView: View {
     func addQuickEntry(grams: Int) {
         
         guard (grams > 0) else { return }
-        globalString.listOfEntries.append(grams)
+        globalString.listOfEntries.append(Entry(grams: grams))
         saveListToStorage()
         
         print("Added \(grams)")
@@ -184,10 +184,10 @@ struct entryView: View {
     }
     
     // [15, 25, 30, 40] -> "15+25+30+40+"
-    func toStorage(list: [Int]) -> String {
+    func toStorage(list: [Entry]) -> String {
         var str = ""
         for item in list{
-            str += (String(item) + "+")
+            str += (String(item.grams) + "+")
         }
         
         return str
