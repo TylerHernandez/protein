@@ -135,7 +135,7 @@ struct entryView: View {
         } // Vstack 1
             .navigationBarHidden(false)
             .navigationBarBackButtonHidden(false)
-            .navigationTitle("Entry View")
+            .navigationTitle("Entry")
             .onAppear {
                 // Need to reload string with most up to date listOfEntries or it will be empty.
                 globalString.reload()
@@ -224,6 +224,6 @@ struct BackgroundBlurView: UIViewRepresentable {
 
 struct entryView_Previews: PreviewProvider {
     static var previews: some View {
-        entryView()
+        entryView().preferredColorScheme(.dark)
     }
 }

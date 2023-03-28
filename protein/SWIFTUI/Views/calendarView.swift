@@ -118,13 +118,13 @@ struct calendarView: View {
         }
             .navigationBarHidden(false)
             .navigationBarBackButtonHidden(false)
-            .navigationTitle("Calendar View")
+            .navigationTitle("History")
         
     } // ends view
 }
 
 struct calendarView_Previews: PreviewProvider {
     static var previews: some View {
-        calendarView()
+        calendarView().preferredColorScheme(.dark)
     }
 }

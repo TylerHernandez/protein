@@ -19,12 +19,6 @@ struct saveProteinView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("Save Protein")
-                    .bold()
-                    .font(.system(size: 21.0))
-            }
-            
             
             VStack {
                 DatePicker(selection: $date, in: ...Date.now, displayedComponents: .date) {
@@ -45,8 +39,10 @@ struct saveProteinView: View {
             Spacer()
                 .frame(width: 1, height: 74, alignment: .bottom)
             
-        }.navigationBarHidden(false) // Need to keep this hidden or navigation controller blocks other buttons.
+        }
+            .navigationBarHidden(false)
             .navigationBarBackButtonHidden(false)
+            .navigationTitle("Save")
         
     }// ends body.
     
@@ -66,6 +62,6 @@ struct saveProteinView: View {
 
 struct saveProteinView_Previews: PreviewProvider {
     static var previews: some View {
-        saveProteinView()
+        saveProteinView().preferredColorScheme(.dark)
     }
 }

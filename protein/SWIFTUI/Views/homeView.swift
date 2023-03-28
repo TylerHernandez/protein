@@ -88,18 +88,22 @@ struct homeView: View {
         NavigationView {
             VStack{
                 
-                HStack(spacing: 30){
+                HStack(spacing: 25){
                 
                     NavigationLink(destination: calendarView()){
-                        Text("Calendar View")
+                        Text("History")
+                    }
+                    
+                    NavigationLink(destination: configurationView()){
+                        Text("Configuration")
                     }
                     
                     NavigationLink(destination: saveProteinView(intake: globalString.intake())){
-                        Text("Save Protein View")
+                        Text("Save Protein")
                     }
                     
                     NavigationLink(destination: entryView()){
-                        Text("Entry View")
+                        Text("Add/Remove")
                     }
                     
                 } // Ends HStack
@@ -119,7 +123,7 @@ struct homeView: View {
                 
                 
             }// Ends VStack
-            .navigationTitle("Navigation View")
+            .navigationTitle("Home")
         }
         
     }
@@ -137,6 +141,6 @@ struct homeView: View {
 
 struct homeView_Previews: PreviewProvider {
     static var previews: some View {
-        homeView()
+        homeView().preferredColorScheme(.dark)
     }
 }
