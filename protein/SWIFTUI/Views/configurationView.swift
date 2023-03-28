@@ -130,7 +130,6 @@ struct configurationView: View {
         .navigationTitle("Configuration")
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
-            print("Refreshing globalString from storage")
             globalString.reload()
         }// Ends onAppear
         .popover(isPresented: $showPopup) {

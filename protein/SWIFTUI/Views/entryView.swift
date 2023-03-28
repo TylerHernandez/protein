@@ -27,22 +27,21 @@ struct entryView: View {
                 }
                 print("Removing all entries from list")
                 showPopup = true
-            } .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+            } .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.blue)
             
             HStack {
-                Spacer()
                 
                 Button(globalString.config["1Button"] ?? "1Button"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "") ?? 0)
                     showPopup = true
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -54,8 +53,8 @@ struct entryView: View {
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "") ?? 0)
                     showPopup = true
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -68,8 +67,8 @@ struct entryView: View {
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "") ?? 0)
                     showPopup = true
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -83,8 +82,8 @@ struct entryView: View {
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "") ?? 0)
                     showPopup = true
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -95,8 +94,8 @@ struct entryView: View {
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "") ?? 0)
                     showPopup = true
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -107,8 +106,8 @@ struct entryView: View {
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "") ?? 0)
                     showPopup = true
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -117,21 +116,6 @@ struct entryView: View {
                 Spacer()
             } // Hstack 2
             
-            Spacer().frame(width: 1, height: 60, alignment: .bottom)
-            VStack{
-                TextField("Entry Here", text: $entry).frame(width: CGFloat(100), height: CGFloat(30), alignment: .center).onSubmit {
-                    addQuickEntry(grams: Int(entry) ?? 0)
-                    showPopup = true
-                    entry = ""
-                    
-                }
-                TextField("Remove Here", text: $removal).frame(width: CGFloat(120), height: CGFloat(30), alignment: .center).onSubmit {
-                    removeOldEntry(grams: Int(removal) ?? 0)
-                    showPopup = true
-                    removal = ""
-                }
-            } // Vstack 2
-
         } // Vstack 1
             .navigationBarHidden(false)
             .navigationBarBackButtonHidden(false)
@@ -150,6 +134,26 @@ struct entryView: View {
                         .tint(.green)
                 }.background(BackgroundBlurView())
             }
+            
+            Spacer().frame(width: 1, height: 40, alignment: .bottom)
+            VStack{
+                TextField("Entry Here", text: $entry).frame(width: CGFloat(100), height: CGFloat(30), alignment: .center).onSubmit {
+                    addQuickEntry(grams: Int(entry) ?? 0)
+                    showPopup = true
+                    entry = ""
+                    
+                }.keyboardType(.numbersAndPunctuation)
+                
+                TextField("Remove Here", text: $removal).frame(width: CGFloat(120), height: CGFloat(30), alignment: .center).onSubmit {
+                    removeOldEntry(grams: Int(removal) ?? 0)
+                    showPopup = true
+                    removal = ""
+                }.keyboardType(.numbersAndPunctuation)
+            } // Vstack 2
+            
+            Spacer().frame(width: 1, height: 120, alignment: .bottom)
+
+        
         
     }
      
