@@ -22,8 +22,8 @@ class GlobalString: ObservableObject {
         config = [:]
     }
     
-    func reload() {
-        listOfEntries = loadListFromStorage()
+    func reload(date: String) {
+        listOfEntries = loadListFromStorage(date: date)
         config = loadConfigFromStorage()
     }
     
@@ -57,7 +57,7 @@ class GlobalString: ObservableObject {
         return nil
     }
     
-    func loadListFromStorage() -> [Entry] {
+    func loadListFromStorage(date: String) -> [Entry] {
         
         let defaults = UserDefaults.standard
         
@@ -113,7 +113,6 @@ struct homeView: View {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
                     }
                     
-                    
                 }
                 
                 List {
@@ -121,7 +120,7 @@ struct homeView: View {
                         Text("\(entry.grams)")
                     }
                 }.onAppear {
-                    globalString.reload()
+                    globalString.reload(date: date.formatted(date: .long, time: .omitted))
                 }
                 
                 
@@ -138,7 +137,7 @@ struct homeView: View {
                         }
                     }
                     
-                    NavigationLink(destination: configurationView()){
+                    NavigationLink(destination: configurationView(date: date.formatted(date: .long, time: .omitted))){
                         VStack {
                             Image(systemName: "gear")
                             Text("Configuration")
@@ -152,7 +151,7 @@ struct homeView: View {
                         }
                     }
                     
-                    NavigationLink(destination: entryView()){
+                    NavigationLink(destination: entryView(date: date.formatted(date: .long, time: .omitted))){
                         VStack {
                             Image(systemName: "plus.app")
                             Text("Add/Remove")

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct configurationView: View {
     
+    var date : String
+    
     @StateObject var globalString = GlobalString()
     
     @State private var showPopup = false
@@ -18,7 +20,7 @@ struct configurationView: View {
         VStack{
             
             NavigationLink ("Reset Config"){
-                editConfigView(button: "", showPopup: true)
+                editConfigView(date: date, button: "", showPopup: true)
             }
             
             
@@ -26,7 +28,8 @@ struct configurationView: View {
                 Spacer()
                 
                 NavigationLink (globalString.config["1Button"] ?? "1Button"){
-                    editConfigView(button: "1Button",
+                    editConfigView(date: date,
+                                   button: "1Button",
                                    foodName: stripTitleFrom(str: globalString.config["1Button"] ?? ""),
                                    foodValue: stripProteinFrom(str: globalString.config["1Button"] ?? "") ?? 0,
                                    showPopup: false
@@ -42,7 +45,8 @@ struct configurationView: View {
                 Spacer()
                 
                 NavigationLink (globalString.config["2Button"] ?? "2Button"){
-                    editConfigView(button: "2Button",
+                    editConfigView(date: date,
+                                   button: "2Button",
                                    foodName: stripTitleFrom(str: globalString.config["2Button"] ?? ""),
                                    foodValue: stripProteinFrom(str: globalString.config["2Button"] ?? "") ?? 0,
                                    showPopup: false
@@ -59,7 +63,8 @@ struct configurationView: View {
                 Spacer()
                 
                 NavigationLink (globalString.config["3Button"] ?? "3Button"){
-                    editConfigView(button: "3Button",
+                    editConfigView(date: date,
+                                   button: "3Button",
                                    foodName: stripTitleFrom(str: globalString.config["3Button"] ?? ""),
                                    foodValue: stripProteinFrom(str: globalString.config["3Button"] ?? "") ?? 0,
                                    showPopup: false
@@ -77,7 +82,8 @@ struct configurationView: View {
             HStack {
                 Spacer()
                 NavigationLink (globalString.config["4Button"] ?? "4Button"){
-                    editConfigView(button: "4Button",
+                    editConfigView(date: date,
+                                   button: "4Button",
                                    foodName: stripTitleFrom(str: globalString.config["4Button"] ?? ""),
                                    foodValue: stripProteinFrom(str: globalString.config["4Button"] ?? "") ?? 0,
                                    showPopup: false
@@ -92,7 +98,8 @@ struct configurationView: View {
                 
                 Spacer()
                 NavigationLink (globalString.config["5Button"] ?? "5Button"){
-                    editConfigView(button: "5Button",
+                    editConfigView(date: date,
+                                   button: "5Button",
                                    foodName: stripTitleFrom(str: globalString.config["5Button"] ?? ""),
                                    foodValue: stripProteinFrom(str: globalString.config["5Button"] ?? "") ?? 0,
                                    showPopup: false
@@ -107,7 +114,8 @@ struct configurationView: View {
                 
                 Spacer()
                 NavigationLink (globalString.config["6Button"] ?? "6Button"){
-                    editConfigView(button: "6Button",
+                    editConfigView(date: date,
+                                   button: "6Button",
                                    foodName: stripTitleFrom(str: globalString.config["6Button"] ?? ""),
                                    foodValue: stripProteinFrom(str: globalString.config["6Button"] ?? "") ?? 0,
                                    showPopup: false
@@ -130,7 +138,7 @@ struct configurationView: View {
         .navigationTitle("Configuration")
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
-            globalString.reload()
+            globalString.reload(date: date)
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
             ZStack {
@@ -176,6 +184,8 @@ struct configurationView: View {
 
 struct editConfigView : View {
     
+    var date : String
+    
     @State var button: String
     
     @StateObject var globalString = GlobalString()
@@ -216,7 +226,7 @@ struct editConfigView : View {
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
             print("Refreshing config from storage")
-            globalString.reload()
+            globalString.reload(date: date)
         }// Ends onAppear
         
         .popover(isPresented: $showPopup) {
@@ -306,6 +316,6 @@ struct editConfigView : View {
 
 struct configurationView_Previews: PreviewProvider {
     static var previews: some View {
-        editConfigView(button: "1Button", showPopup: false).preferredColorScheme(.dark)
+        editConfigView(date: "", button: "1Button", showPopup: false).preferredColorScheme(.dark)
     }
 }

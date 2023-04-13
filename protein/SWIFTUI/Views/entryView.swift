@@ -9,6 +9,8 @@ import SwiftUI
 
 struct entryView: View {
     
+    var date: String
+    
     @StateObject var globalString = GlobalString()
     
     @State private var entry: String = ""
@@ -122,7 +124,7 @@ struct entryView: View {
             .navigationTitle("Entry")
             .onAppear {
                 // Need to reload string with most up to date listOfEntries or it will be empty.
-                globalString.reload()
+                globalString.reload(date: date)
             }
             .popover(isPresented: $showPopup) {
                 ZStack {
@@ -228,6 +230,6 @@ struct BackgroundBlurView: UIViewRepresentable {
 
 struct entryView_Previews: PreviewProvider {
     static var previews: some View {
-        entryView().preferredColorScheme(.dark)
+        entryView(date: "").preferredColorScheme(.dark)
     }
 }
