@@ -86,29 +86,10 @@ struct homeView: View {
     
     var body: some View {
         NavigationView {
+            
+            // TODO: Add Current Date.
+            
             VStack{
-                
-                HStack(spacing: 25){
-                
-                    NavigationLink(destination: calendarView()){
-                        Text("History")
-                    }
-                    
-                    NavigationLink(destination: configurationView()){
-                        Text("Configuration")
-                    }
-                    
-                    NavigationLink(destination: saveProteinView(intake: globalString.intake())){
-                        Text("Save Protein")
-                    }
-                    
-                    NavigationLink(destination: entryView()){
-                        Text("Add/Remove")
-                    }
-                    
-                } // Ends HStack
-                
-                //Spacer()
                 
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
@@ -119,8 +100,43 @@ struct homeView: View {
                 }
                 
                 
-                Text("total sum: \(totalSum())")
+                Text("Total Sum: \(totalSum()) grams")
                 
+                Spacer().frame(width: 1, height: 30, alignment: .bottom)
+                
+                HStack(spacing: 25){
+                
+                    NavigationLink(destination: calendarView()){
+                        VStack {
+                            Image(systemName: "book")
+                            Text("History")
+                        }
+                    }
+                    
+                    NavigationLink(destination: configurationView()){
+                        VStack {
+                            Image(systemName: "gear")
+                            Text("Configuration")
+                        }
+                    }
+                    
+                    NavigationLink(destination: saveProteinView(intake: globalString.intake())){
+                        VStack {
+                            Image(systemName: "square.and.arrow.down")
+                            Text("Save Protein")
+                        }
+                    }
+                    
+                    NavigationLink(destination: entryView()){
+                        VStack {
+                            Image(systemName: "plus.app")
+                            Text("Add/Remove")
+                        }
+                    }
+                    
+                } // Ends HStack
+                
+                Spacer().frame(width: 1, height: 30, alignment: .bottom)
                 
             }// Ends VStack
             .navigationTitle("Home")
