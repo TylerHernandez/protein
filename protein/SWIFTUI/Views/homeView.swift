@@ -84,12 +84,37 @@ class GlobalString: ObservableObject {
 struct homeView: View {
     @StateObject var globalString = GlobalString()
     
+    @State private var date = Date.now
+    
     var body: some View {
         NavigationView {
             
-            // TODO: Add Current Date.
-            
             VStack{
+                
+                HStack {
+                    
+                    // Go Back by 1 date
+                    Button {
+                        date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+                    } label: {
+                        Image(systemName: "arrowshape.turn.up.backward.badge.clock")
+                    }
+                    
+                    Spacer()
+                    
+                    Text(date.formatted(date: .long, time: .omitted))
+                    
+                    Spacer()
+                    
+                    // Go Forward by 1 date
+                    Button {
+                        date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+                    } label: {
+                        Image(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
+                    }
+                    
+                    
+                }
                 
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
