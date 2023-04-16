@@ -84,7 +84,9 @@ class GlobalString: ObservableObject {
 struct homeView: View {
     @StateObject var globalString = GlobalString()
     
-    @State private var date = Date.now
+    @State private var date = Calendar.current.startOfDay(for: Date.now)
+    
+    @State private var todayLabel = ""
     
     var body: some View {
         NavigationView {
@@ -96,6 +98,7 @@ struct homeView: View {
                     // Go Back by 1 date
                     Button {
                         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+                        loadTodayLabel()
                     } label: {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock")
                     }
@@ -103,12 +106,14 @@ struct homeView: View {
                     Spacer()
                     
                     Text(date.formatted(date: .long, time: .omitted))
+                    Text(todayLabel).foregroundColor(.blue)
                     
                     Spacer()
                     
                     // Go Forward by 1 date
                     Button {
                         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+                        loadTodayLabel()
                     } label: {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
                     }
@@ -164,8 +169,29 @@ struct homeView: View {
                 
             }// Ends VStack
             .navigationTitle("Home")
+            .onAppear(perform: loadTodayLabel)
         }
         
+    }
+    
+    func loadTodayLabel() -> Void {
+        if (Calendar.current.isDateInToday(date)){
+            todayLabel = "(Today)"
+        } else if (Calendar.current.isDateInYesterday(date)) {
+            todayLabel = "(Yesterday)"
+        } else if (Calendar.current.isDateInTomorrow(date)) {
+            todayLabel = "(Tomorrow)"
+        } else {
+            
+            let numberOfDays = Calendar.current.dateComponents([.day], from: date, to: Calendar.current.startOfDay(for: Date.now)).day!
+            
+            if (numberOfDays < 0) {
+                todayLabel = "in \(-numberOfDays) days"
+            } else {
+                todayLabel = "\(numberOfDays) days ago"
+            }
+            
+        }
     }
     
     func totalSum() -> Int {
