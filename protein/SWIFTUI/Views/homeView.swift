@@ -101,12 +101,11 @@ struct homeView: View {
                         loadTodayLabel()
                     } label: {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock")
-                    }
+                    }.font(.title)
                     
                     Spacer()
                     
-                    Text(date.formatted(date: .long, time: .omitted))
-                    Text(todayLabel).foregroundColor(.blue)
+                    Text(date.formatted(date: .long, time: .omitted)).font(.title)
                     
                     Spacer()
                     
@@ -116,9 +115,11 @@ struct homeView: View {
                         loadTodayLabel()
                     } label: {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
-                    }
+                    }.font(.title)
                     
                 }
+                
+                Text(todayLabel).foregroundColor(.blue)
                 
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
@@ -129,38 +130,38 @@ struct homeView: View {
                 }
                 
                 
-                Text("Total Sum: \(totalSum()) grams")
+                Text("Total Sum: \(totalSum()) grams").font(.title2)
                 
                 Spacer().frame(width: 1, height: 30, alignment: .bottom)
                 
-                HStack(spacing: 25){
+                HStack(spacing: 50){
                 
                     NavigationLink(destination: calendarView()){
                         VStack {
                             Image(systemName: "book")
                             Text("History")
-                        }
+                        }.font(.title3)
                     }
                     
                     NavigationLink(destination: configurationView(date: date.formatted(date: .long, time: .omitted))){
                         VStack {
                             Image(systemName: "gear")
-                            Text("Configuration")
-                        }
+                            Text("Config")
+                        }.font(.title3)
                     }
                     
                     NavigationLink(destination: saveProteinView(intake: globalString.intake())){
                         VStack {
                             Image(systemName: "square.and.arrow.down")
-                            Text("Save Protein")
-                        }
+                            Text("Save")
+                        }.font(.title3)
                     }
                     
                     NavigationLink(destination: entryView(date: date.formatted(date: .long, time: .omitted))){
                         VStack {
                             Image(systemName: "plus.app")
-                            Text("Add/Remove")
-                        }
+                            Text("Entry")
+                        }.font(.title3)
                     }
                     
                 } // Ends HStack
@@ -169,6 +170,11 @@ struct homeView: View {
                 
             }// Ends VStack
             .navigationTitle("Home")
+//            .toolbar {
+//                ToolbarItem(placement: .principal) {
+//                    Image(systemName: "house.fill")
+//                }
+//            }
             .onAppear(perform: loadTodayLabel)
         }
         
