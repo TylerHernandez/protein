@@ -88,6 +88,8 @@ struct homeView: View {
     
     @State private var todayLabel = ""
     
+    @State private var showPopup = false
+    
     var body: some View {
         NavigationView {
             
@@ -150,7 +152,11 @@ struct homeView: View {
                         }.font(.title3)
                     }
                     
-                    NavigationLink(destination: saveProteinView(intake: globalString.intake())){
+                    Button { // Action
+                        saveProteinToStorage()
+                        print("Saved protein")
+                        showPopup = true
+                    } label: {
                         VStack {
                             Image(systemName: "square.and.arrow.down")
                             Text("Save")
@@ -170,13 +176,30 @@ struct homeView: View {
                 
             }// Ends VStack
             .navigationTitle("Home")
-//            .toolbar {
-//                ToolbarItem(placement: .principal) {
-//                    Image(systemName: "house.fill")
-//                }
-//            }
             .onAppear(perform: loadTodayLabel)
+            .popover(isPresented: $showPopup) {
+                ZStack {
+                    Button("Saved!") {
+                        showPopup = false
+                    }
+                    .font(.system(size: 25))
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                }.background(BackgroundBlurView())
+            }
         }
+        
+    }
+    
+    func saveProteinToStorage() {
+        
+        let defaults = UserDefaults.standard
+        
+        let key = (date.formatted(date: .long, time: .omitted))
+        
+        let storedIntake = String(globalString.intake())
+        
+        defaults.set(storedIntake, forKey: key)
         
     }
     
