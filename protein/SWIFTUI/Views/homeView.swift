@@ -61,10 +61,33 @@ class GlobalString: ObservableObject {
         
         let defaults = UserDefaults.standard
         
-        if let storedList = defaults.string(forKey: DefaultsKeys.entryKey) {
+        let key = "p" + date
+        
+        if let storedList = defaults.string(forKey: key) {
             return toList(str: storedList)
         }
         return []
+    }
+    
+    func saveListToStorage(date: String) -> Void {
+        
+        let defaults = UserDefaults.standard
+        
+        let key = "p" + date
+        
+        let storedList = toStorage(list: self.listOfEntries)
+        defaults.set(storedList, forKey: key)
+        
+    }
+    
+    // [15, 25, 30, 40] -> "15+25+30+40+"
+    func toStorage(list: [Entry]) -> String {
+        var str = ""
+        for item in list{
+            str += (String(item.grams) + "+")
+        }
+        
+        return str
     }
     
     func toList(str: String) -> [Entry] {
@@ -101,6 +124,7 @@ struct homeView: View {
                     Button {
                         date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
                         loadTodayLabel()
+                        globalString.listOfEntries = globalString.loadListFromStorage(date: date.formatted(date: .long, time: .omitted))
                     } label: {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock")
                     }.font(.title)
@@ -115,6 +139,7 @@ struct homeView: View {
                     Button {
                         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
                         loadTodayLabel()
+                        globalString.listOfEntries = globalString.loadListFromStorage(date: date.formatted(date: .long, time: .omitted))
                     } label: {
                         Image(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
                     }.font(.title)
@@ -188,6 +213,15 @@ struct homeView: View {
                 }.background(BackgroundBlurView())
             }
         }
+        
+    }
+    
+   // Save our list of entries to storage with our given timestamp.
+    func saveListOfEntriesToStorage() {
+        // Given a
+    }
+    
+    func loadListOfEntriesFromStorage() {
         
     }
     
