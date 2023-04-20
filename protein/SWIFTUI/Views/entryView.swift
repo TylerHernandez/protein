@@ -9,6 +9,8 @@ import SwiftUI
 
 struct entryView: View {
     
+    var date: String
+    
     @StateObject var globalString = GlobalString()
     
     @State private var entry: String = ""
@@ -122,7 +124,7 @@ struct entryView: View {
             .navigationTitle("Entry")
             .onAppear {
                 // Need to reload string with most up to date listOfEntries or it will be empty.
-                globalString.reload()
+                globalString.reload(date: date)
             }
             .popover(isPresented: $showPopup) {
                 ZStack {
@@ -166,7 +168,7 @@ struct entryView: View {
             }
         }
 
-        saveListToStorage()
+        globalString.saveListToStorage(date: date)
 
     }
     
@@ -174,27 +176,9 @@ struct entryView: View {
         
         guard (grams > 0) else { return }
         globalString.listOfEntries.append(Entry(grams: grams))
-        saveListToStorage()
+        globalString.saveListToStorage(date: date)
         
         print("Added \(grams)")
-    }
-    
-    func saveListToStorage() {
-        
-        let defaults = UserDefaults.standard
-        
-        let storedList = toStorage(list: globalString.listOfEntries)
-        defaults.set(storedList, forKey: DefaultsKeys.entryKey)
-    }
-    
-    // [15, 25, 30, 40] -> "15+25+30+40+"
-    func toStorage(list: [Entry]) -> String {
-        var str = ""
-        for item in list{
-            str += (String(item.grams) + "+")
-        }
-        
-        return str
     }
     
     // Helper function for finding how much protein is in the title
@@ -228,6 +212,6 @@ struct BackgroundBlurView: UIViewRepresentable {
 
 struct entryView_Previews: PreviewProvider {
     static var previews: some View {
-        entryView().preferredColorScheme(.dark)
+        entryView(date: "").preferredColorScheme(.dark)
     }
 }

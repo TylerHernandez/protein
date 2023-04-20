@@ -22,8 +22,8 @@ class GlobalString: ObservableObject {
         config = [:]
     }
     
-    func reload() {
-        listOfEntries = loadListFromStorage()
+    func reload(date: String) {
+        listOfEntries = loadListFromStorage(date: date)
         config = loadConfigFromStorage()
     }
     
@@ -57,14 +57,37 @@ class GlobalString: ObservableObject {
         return nil
     }
     
-    func loadListFromStorage() -> [Entry] {
+    func loadListFromStorage(date: String) -> [Entry] {
         
         let defaults = UserDefaults.standard
         
-        if let storedList = defaults.string(forKey: DefaultsKeys.entryKey) {
+        let key = "p" + date
+        
+        if let storedList = defaults.string(forKey: key) {
             return toList(str: storedList)
         }
         return []
+    }
+    
+    func saveListToStorage(date: String) -> Void {
+        
+        let defaults = UserDefaults.standard
+        
+        let key = "p" + date
+        
+        let storedList = toStorage(list: self.listOfEntries)
+        defaults.set(storedList, forKey: key)
+        
+    }
+    
+    // [15, 25, 30, 40] -> "15+25+30+40+"
+    func toStorage(list: [Entry]) -> String {
+        var str = ""
+        for item in list{
+            str += (String(item.grams) + "+")
+        }
+        
+        return str
     }
     
     func toList(str: String) -> [Entry] {
@@ -84,48 +107,154 @@ class GlobalString: ObservableObject {
 struct homeView: View {
     @StateObject var globalString = GlobalString()
     
+    @State private var date = Calendar.current.startOfDay(for: Date.now)
+    
+    @State private var todayLabel = ""
+    
+    @State private var showPopup = false
+    
     var body: some View {
         NavigationView {
+            
             VStack{
                 
-                HStack(spacing: 25){
+                HStack {
+                    
+                    // Go Back by 1 date
+                    Button {
+                        date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+                        loadTodayLabel()
+                        globalString.listOfEntries = globalString.loadListFromStorage(date: date.formatted(date: .long, time: .omitted))
+                    } label: {
+                        Image(systemName: "arrowshape.turn.up.backward.badge.clock")
+                    }.font(.title)
+                    
+                    Spacer()
+                    
+                    Text(date.formatted(date: .long, time: .omitted)).font(.title)
+                    
+                    Spacer()
+                    
+                    // Go Forward by 1 date
+                    Button {
+                        date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+                        loadTodayLabel()
+                        globalString.listOfEntries = globalString.loadListFromStorage(date: date.formatted(date: .long, time: .omitted))
+                    } label: {
+                        Image(systemName: "arrowshape.turn.up.backward.badge.clock.rtl")
+                    }.font(.title)
+                    
+                }
                 
-                    NavigationLink(destination: calendarView()){
-                        Text("History")
-                    }
-                    
-                    NavigationLink(destination: configurationView()){
-                        Text("Configuration")
-                    }
-                    
-                    NavigationLink(destination: saveProteinView(intake: globalString.intake())){
-                        Text("Save Protein")
-                    }
-                    
-                    NavigationLink(destination: entryView()){
-                        Text("Add/Remove")
-                    }
-                    
-                } // Ends HStack
-                
-                //Spacer()
+                Text(todayLabel).foregroundColor(.blue)
                 
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
                         Text("\(entry.grams)")
                     }
                 }.onAppear {
-                    globalString.reload()
+                    globalString.reload(date: date.formatted(date: .long, time: .omitted))
                 }
                 
                 
-                Text("total sum: \(totalSum())")
+                Text("Total Sum: \(totalSum()) grams").font(.title2)
                 
+                Spacer().frame(width: 1, height: 30, alignment: .bottom)
+                
+                HStack(spacing: 50){
+                
+                    NavigationLink(destination: calendarView()){
+                        VStack {
+                            Image(systemName: "book")
+                            Text("History")
+                        }.font(.title3)
+                    }
+                    
+                    NavigationLink(destination: configurationView(date: date.formatted(date: .long, time: .omitted))){
+                        VStack {
+                            Image(systemName: "gear")
+                            Text("Config")
+                        }.font(.title3)
+                    }
+                    
+                    Button { // Action
+                        saveProteinToStorage()
+                        print("Saved protein")
+                        showPopup = true
+                    } label: {
+                        VStack {
+                            Image(systemName: "square.and.arrow.down")
+                            Text("Save")
+                        }.font(.title3)
+                    }
+                    
+                    NavigationLink(destination: entryView(date: date.formatted(date: .long, time: .omitted))){
+                        VStack {
+                            Image(systemName: "plus.app")
+                            Text("Entry")
+                        }.font(.title3)
+                    }
+                    
+                } // Ends HStack
+                
+                Spacer().frame(width: 1, height: 30, alignment: .bottom)
                 
             }// Ends VStack
             .navigationTitle("Home")
+            .onAppear(perform: loadTodayLabel)
+            .popover(isPresented: $showPopup) {
+                ZStack {
+                    Button("Saved!") {
+                        showPopup = false
+                    }
+                    .font(.system(size: 25))
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                }.background(BackgroundBlurView())
+            }
         }
         
+    }
+    
+   // Save our list of entries to storage with our given timestamp.
+    func saveListOfEntriesToStorage() {
+        // Given a
+    }
+    
+    func loadListOfEntriesFromStorage() {
+        
+    }
+    
+    func saveProteinToStorage() {
+        
+        let defaults = UserDefaults.standard
+        
+        let key = (date.formatted(date: .long, time: .omitted))
+        
+        let storedIntake = String(globalString.intake())
+        
+        defaults.set(storedIntake, forKey: key)
+        
+    }
+    
+    func loadTodayLabel() -> Void {
+        if (Calendar.current.isDateInToday(date)){
+            todayLabel = "(Today)"
+        } else if (Calendar.current.isDateInYesterday(date)) {
+            todayLabel = "(Yesterday)"
+        } else if (Calendar.current.isDateInTomorrow(date)) {
+            todayLabel = "(Tomorrow)"
+        } else {
+            
+            let numberOfDays = Calendar.current.dateComponents([.day], from: date, to: Calendar.current.startOfDay(for: Date.now)).day!
+            
+            if (numberOfDays < 0) {
+                todayLabel = "in \(-numberOfDays) days"
+            } else {
+                todayLabel = "\(numberOfDays) days ago"
+            }
+            
+        }
     }
     
     func totalSum() -> Int {
