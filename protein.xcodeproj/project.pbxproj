@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		622CB36429C4D003003B9559 /* saveProteinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CB36329C4D003003B9559 /* saveProteinView.swift */; };
 		622CB36629C8EE24003B9559 /* entryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CB36529C8EE24003B9559 /* entryView.swift */; };
 		623C9F6E29D0DEBA00925654 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623C9F6D29D0DEBA00925654 /* Entry.swift */; };
 		623C9F7329D0E67500925654 /* configurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623C9F7229D0E67500925654 /* configurationView.swift */; };
@@ -38,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		622CB36329C4D003003B9559 /* saveProteinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = saveProteinView.swift; sourceTree = "<group>"; };
 		622CB36529C8EE24003B9559 /* entryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entryView.swift; sourceTree = "<group>"; };
 		623C9F6D29D0DEBA00925654 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		623C9F7229D0E67500925654 /* configurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = configurationView.swift; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 				623C9F7229D0E67500925654 /* configurationView.swift */,
 				62D082E129BEE09700E604BD /* calendarView.swift */,
 				622CB36529C8EE24003B9559 /* entryView.swift */,
-				622CB36329C4D003003B9559 /* saveProteinView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -287,7 +284,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				62D082E229BEE09700E604BD /* calendarView.swift in Sources */,
-				622CB36429C4D003003B9559 /* saveProteinView.swift in Sources */,
 				623C9F7329D0E67500925654 /* configurationView.swift in Sources */,
 				623C9F6E29D0DEBA00925654 /* Entry.swift in Sources */,
 				62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */,
