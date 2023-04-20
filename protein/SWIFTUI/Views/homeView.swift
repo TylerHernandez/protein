@@ -212,7 +212,7 @@ struct homeView: View {
                     .tint(.green)
                 }.background(BackgroundBlurView())
             }
-        }
+        }// Navigation View
         
     }
     
