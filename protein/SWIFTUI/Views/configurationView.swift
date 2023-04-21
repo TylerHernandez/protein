@@ -19,8 +19,8 @@ struct configurationView: View {
     var body: some View {
         VStack{
             
-            NavigationLink ("Reset Config"){
-                editConfigView(date: date, button: "", showPopup: true)
+            Button ("Reset Config"){
+                configHelper(globalString: globalString).resetToDefaultConfig()
             }
             
             
@@ -215,7 +215,7 @@ struct editConfigView : View {
                     print("saving to config")
                     print(foodName)
                     print(foodValue)
-                    saveToConfig()
+                    configHelper(globalString: globalString).saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
                 }
                 
                 
@@ -229,47 +229,41 @@ struct editConfigView : View {
             globalString.reload(date: date)
         }// Ends onAppear
         
-        .popover(isPresented: $showPopup) {
-            ZStack {
-                Button("Reset Configuration") {
-                    resetToDefaultConfig()
-                    showPopup = false
-                }
-                    .font(.system(size: 25))
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
-            }.background(BackgroundBlurView())
-        }
-        
     }
+    
+}// ends struct
+
+struct configHelper {
+    
+    @StateObject var globalString: GlobalString
     
     func resetToDefaultConfig() {
 
         // Resetting buttons 1-4 to their default state.
-        foodName = "1 Milk"
-        foodValue = 7
-        button = "1Button"
-        saveToConfig()
+        var foodName = "1 Milk"
+        var foodValue = 7
+        var button = "1Button"
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
         foodName = "2 Eggs/1 Yogurt"
         foodValue = 12
         button = "2Button"
-        saveToConfig()
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
         foodName = "1 Whey"
         foodValue = 25
         button = "3Button"
-        saveToConfig()
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
         foodName = "2 Bread"
         foodValue = 10
         button = "4Button"
-        saveToConfig()
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
     }
     
     // Saves pair {button} : {name and value} into config.
-    func saveToConfig() {
+    func saveToConfig(foodName: String, foodValue: Int, button: String) {
 
         let buttonText = button // Determine button we are editting.
         
@@ -283,7 +277,16 @@ struct editConfigView : View {
                 print("failed dict from String")
             }
     }
+    
+    // Puts dictionary config into storage
+    func storeConfig(config: Dictionary<String, String>){
 
+        let defaults = UserDefaults.standard
+
+        let str = stringifyConfig(config: config)
+        defaults.set(str, forKey: DefaultsKeys.configKey)
+    }
+    
     // Retrieve a string version of config to store.
     func stringifyConfig(config: Dictionary<String, String>) -> String {
         var str = "{"
@@ -294,15 +297,6 @@ struct editConfigView : View {
         return str
     }
 
-    // Puts dictionary config into storage
-    func storeConfig(config: Dictionary<String, String>){
-
-        let defaults = UserDefaults.standard
-
-        let str = stringifyConfig(config: config)
-        defaults.set(str, forKey: DefaultsKeys.configKey)
-    }
-
     // Given a string dictionary, format into usable data type.
     func dictFromString(str: String) -> Dictionary<String, String>? {
 
@@ -311,8 +305,7 @@ struct editConfigView : View {
         }
         return nil
     }
-    
-}// ends struct
+}
 
 struct configurationView_Previews: PreviewProvider {
     static var previews: some View {
