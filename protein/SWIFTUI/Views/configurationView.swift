@@ -27,7 +27,7 @@ struct configurationView: View {
             HStack {
                 Spacer()
                 
-                NavigationLink (globalString.config["1Button"] ?? "1Button"){
+                NavigationLink (globalString.config["1Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "1Button",
                                    foodName: stripTitleFrom(str: globalString.config["1Button"] ?? ""),
@@ -35,8 +35,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -44,7 +44,7 @@ struct configurationView: View {
                 
                 Spacer()
                 
-                NavigationLink (globalString.config["2Button"] ?? "2Button"){
+                NavigationLink (globalString.config["2Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "2Button",
                                    foodName: stripTitleFrom(str: globalString.config["2Button"] ?? ""),
@@ -52,8 +52,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -62,7 +62,7 @@ struct configurationView: View {
                 
                 Spacer()
                 
-                NavigationLink (globalString.config["3Button"] ?? "3Button"){
+                NavigationLink (globalString.config["3Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "3Button",
                                    foodName: stripTitleFrom(str: globalString.config["3Button"] ?? ""),
@@ -70,8 +70,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -81,7 +81,7 @@ struct configurationView: View {
             } // Hstack 1
             HStack {
                 Spacer()
-                NavigationLink (globalString.config["4Button"] ?? "4Button"){
+                NavigationLink (globalString.config["4Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "4Button",
                                    foodName: stripTitleFrom(str: globalString.config["4Button"] ?? ""),
@@ -89,15 +89,15 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.yellow)
                 
                 Spacer()
-                NavigationLink (globalString.config["5Button"] ?? "5Button"){
+                NavigationLink (globalString.config["5Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "5Button",
                                    foodName: stripTitleFrom(str: globalString.config["5Button"] ?? ""),
@@ -105,15 +105,15 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.orange)
                 
                 Spacer()
-                NavigationLink (globalString.config["6Button"] ?? "6Button"){
+                NavigationLink (globalString.config["6Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "6Button",
                                    foodName: stripTitleFrom(str: globalString.config["6Button"] ?? ""),
@@ -121,8 +121,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -142,7 +142,7 @@ struct configurationView: View {
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
             ZStack {
-                Text("Submitted!")
+                Button("Submitted"){}
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
@@ -231,7 +231,7 @@ struct editConfigView : View {
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
             ZStack {
-                Text("Saved!")
+                Button("Saved!"){}
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)

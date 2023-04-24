@@ -204,7 +204,7 @@ struct homeView: View {
             .onAppear(perform: loadTodayLabel)
             .popover(isPresented: $showPopup) {
                 ZStack {
-                    Text("Saved!")
+                    Button("Saved!"){}
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
