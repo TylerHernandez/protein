@@ -19,15 +19,15 @@ struct configurationView: View {
     var body: some View {
         VStack{
             
-            NavigationLink ("Reset Config"){
-                editConfigView(date: date, button: "", showPopup: true)
+            Button ("Reset Config"){
+                configHelper(globalString: globalString).resetToDefaultConfig()
             }
             
             
             HStack {
                 Spacer()
                 
-                NavigationLink (globalString.config["1Button"] ?? "1Button"){
+                NavigationLink (globalString.config["1Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "1Button",
                                    foodName: stripTitleFrom(str: globalString.config["1Button"] ?? ""),
@@ -35,8 +35,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -44,7 +44,7 @@ struct configurationView: View {
                 
                 Spacer()
                 
-                NavigationLink (globalString.config["2Button"] ?? "2Button"){
+                NavigationLink (globalString.config["2Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "2Button",
                                    foodName: stripTitleFrom(str: globalString.config["2Button"] ?? ""),
@@ -52,8 +52,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -62,7 +62,7 @@ struct configurationView: View {
                 
                 Spacer()
                 
-                NavigationLink (globalString.config["3Button"] ?? "3Button"){
+                NavigationLink (globalString.config["3Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "3Button",
                                    foodName: stripTitleFrom(str: globalString.config["3Button"] ?? ""),
@@ -70,8 +70,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -81,7 +81,7 @@ struct configurationView: View {
             } // Hstack 1
             HStack {
                 Spacer()
-                NavigationLink (globalString.config["4Button"] ?? "4Button"){
+                NavigationLink (globalString.config["4Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "4Button",
                                    foodName: stripTitleFrom(str: globalString.config["4Button"] ?? ""),
@@ -89,15 +89,15 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.yellow)
                 
                 Spacer()
-                NavigationLink (globalString.config["5Button"] ?? "5Button"){
+                NavigationLink (globalString.config["5Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "5Button",
                                    foodName: stripTitleFrom(str: globalString.config["5Button"] ?? ""),
@@ -105,15 +105,15 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.orange)
                 
                 Spacer()
-                NavigationLink (globalString.config["6Button"] ?? "6Button"){
+                NavigationLink (globalString.config["6Button"] ?? "Configure me"){
                     editConfigView(date: date,
                                    button: "6Button",
                                    foodName: stripTitleFrom(str: globalString.config["6Button"] ?? ""),
@@ -121,8 +121,8 @@ struct configurationView: View {
                                    showPopup: false
                     )
                 }
-                .padding(10)
-                .frame(width: 110, height: 100, alignment: .center )
+                .padding(8)
+                .frame(width: 130, height: 120, alignment: .center )
                 .font(.system(size: 18))
                 .buttonStyle(.bordered)
                 .multilineTextAlignment(.center)
@@ -142,12 +142,13 @@ struct configurationView: View {
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
             ZStack {
-                Button("SUBMITTED!") {
-                    showPopup = false
-                }
+                Button("Submitted"){}
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
+                    .onAppear(){
+                        showPopup = false
+                    }
             }.background(BackgroundBlurView())
         }
         
@@ -198,7 +199,6 @@ struct editConfigView : View {
     var body : some View {
         VStack {
             Form {
-                Text("Editting \(button)")
                 TextField("Enter Name", text: $foodName)
                 HStack{
                     TextField("Protein (g)", value: $foodValue, format: .number).padding(0)
@@ -215,7 +215,8 @@ struct editConfigView : View {
                     print("saving to config")
                     print(foodName)
                     print(foodValue)
-                    saveToConfig()
+                    configHelper(globalString: globalString).saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
+                    showPopup = true
                 }
                 
                 
@@ -228,48 +229,54 @@ struct editConfigView : View {
             print("Refreshing config from storage")
             globalString.reload(date: date)
         }// Ends onAppear
-        
         .popover(isPresented: $showPopup) {
             ZStack {
-                Button("Reset Configuration") {
-                    resetToDefaultConfig()
-                    showPopup = false
-                }
+                Button("Saved!"){}
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
+                    .onAppear(){
+                        showPopup = false
+                    }
             }.background(BackgroundBlurView())
+            
         }
         
     }
     
+}// ends struct
+
+struct configHelper {
+    
+    @StateObject var globalString: GlobalString
+    
     func resetToDefaultConfig() {
 
         // Resetting buttons 1-4 to their default state.
-        foodName = "1 Milk"
-        foodValue = 7
-        button = "1Button"
-        saveToConfig()
+        var foodName = "1 Milk"
+        var foodValue = 7
+        var button = "1Button"
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
         foodName = "2 Eggs/1 Yogurt"
         foodValue = 12
         button = "2Button"
-        saveToConfig()
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
         foodName = "1 Whey"
         foodValue = 25
         button = "3Button"
-        saveToConfig()
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
         foodName = "2 Bread"
         foodValue = 10
         button = "4Button"
-        saveToConfig()
+        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
 
     }
     
     // Saves pair {button} : {name and value} into config.
-    func saveToConfig() {
+    func saveToConfig(foodName: String, foodValue: Int, button: String) {
 
         let buttonText = button // Determine button we are editting.
         
@@ -283,7 +290,16 @@ struct editConfigView : View {
                 print("failed dict from String")
             }
     }
+    
+    // Puts dictionary config into storage
+    func storeConfig(config: Dictionary<String, String>){
 
+        let defaults = UserDefaults.standard
+
+        let str = stringifyConfig(config: config)
+        defaults.set(str, forKey: DefaultsKeys.configKey)
+    }
+    
     // Retrieve a string version of config to store.
     func stringifyConfig(config: Dictionary<String, String>) -> String {
         var str = "{"
@@ -294,15 +310,6 @@ struct editConfigView : View {
         return str
     }
 
-    // Puts dictionary config into storage
-    func storeConfig(config: Dictionary<String, String>){
-
-        let defaults = UserDefaults.standard
-
-        let str = stringifyConfig(config: config)
-        defaults.set(str, forKey: DefaultsKeys.configKey)
-    }
-
     // Given a string dictionary, format into usable data type.
     func dictFromString(str: String) -> Dictionary<String, String>? {
 
@@ -311,8 +318,7 @@ struct editConfigView : View {
         }
         return nil
     }
-    
-}// ends struct
+}
 
 struct configurationView_Previews: PreviewProvider {
     static var previews: some View {
