@@ -204,12 +204,13 @@ struct homeView: View {
             .onAppear(perform: loadTodayLabel)
             .popover(isPresented: $showPopup) {
                 ZStack {
-                    Button("Saved!") {
-                        showPopup = false
-                    }
+                    Text("Saved!")
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
+                    .onAppear(){
+                        showPopup = false
+                    }
                 }.background(BackgroundBlurView())
             }
         }// Navigation View

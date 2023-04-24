@@ -14,6 +14,7 @@
 		627ECB8728E5F87C00C4CDBD /* proteinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB8628E5F87C00C4CDBD /* proteinTests.swift */; };
 		627ECB9128E5F87C00C4CDBD /* proteinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB9028E5F87C00C4CDBD /* proteinUITests.swift */; };
 		627ECB9328E5F87C00C4CDBD /* proteinUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627ECB9228E5F87C00C4CDBD /* proteinUITestsLaunchTests.swift */; };
+		629EADED29F6093500C99504 /* swiftHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629EADEC29F6093500C99504 /* swiftHelper.swift */; };
 		62D082E229BEE09700E604BD /* calendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D082E129BEE09700E604BD /* calendarView.swift */; };
 		62DDDCAD29CA36040066A932 /* homeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DDDCAC29CA36040066A932 /* homeView.swift */; };
 		62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DDDCAE29CA47440066A932 /* proteinApp.swift */; };
@@ -48,6 +49,7 @@
 		627ECB8C28E5F87C00C4CDBD /* proteinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = proteinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		627ECB9028E5F87C00C4CDBD /* proteinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinUITests.swift; sourceTree = "<group>"; };
 		627ECB9228E5F87C00C4CDBD /* proteinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		629EADEC29F6093500C99504 /* swiftHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swiftHelper.swift; sourceTree = "<group>"; };
 		62D082E129BEE09700E604BD /* calendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarView.swift; sourceTree = "<group>"; };
 		62DDDCAC29CA36040066A932 /* homeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeView.swift; sourceTree = "<group>"; };
 		62DDDCAE29CA47440066A932 /* proteinApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinApp.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		627ECB6328E5F87A00C4CDBD = {
 			isa = PBXGroup;
 			children = (
+				629EADEC29F6093500C99504 /* swiftHelper.swift */,
 				627ECB6E28E5F87B00C4CDBD /* protein */,
 				627ECB8528E5F87C00C4CDBD /* proteinTests */,
 				627ECB8F28E5F87C00C4CDBD /* proteinUITests */,
@@ -288,6 +291,7 @@
 				623C9F6E29D0DEBA00925654 /* Entry.swift in Sources */,
 				62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */,
 				622CB36629C8EE24003B9559 /* entryView.swift in Sources */,
+				629EADED29F6093500C99504 /* swiftHelper.swift in Sources */,
 				62DDDCAD29CA36040066A932 /* homeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

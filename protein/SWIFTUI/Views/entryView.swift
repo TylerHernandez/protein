@@ -38,7 +38,7 @@ struct entryView: View {
             
             HStack {
                 
-                Button(globalString.config["1Button"] ?? "1Button"){
+                Button(globalString.config["1Button"] ?? "Configure me!"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "") ?? 0)
                     showPopup = true
                 }
@@ -51,7 +51,7 @@ struct entryView: View {
                 
                 Spacer()
                 
-                Button(globalString.config["2Button"] ?? "2Button"){
+                Button(globalString.config["2Button"] ?? "Configure me!"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "") ?? 0)
                     showPopup = true
                 }
@@ -65,7 +65,7 @@ struct entryView: View {
                 
                 Spacer()
                 
-                Button(globalString.config["3Button"] ?? "3Button"){
+                Button(globalString.config["3Button"] ?? "Configure me!"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "") ?? 0)
                     showPopup = true
                 }
@@ -80,7 +80,7 @@ struct entryView: View {
             } // Hstack 1
             HStack {
                 Spacer()
-                Button(globalString.config["4Button"] ?? "4Button"){
+                Button(globalString.config["4Button"] ?? "Configure me!"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "") ?? 0)
                     showPopup = true
                 }
@@ -92,7 +92,7 @@ struct entryView: View {
                 .foregroundColor(.yellow)
                 
                 Spacer()
-                Button(globalString.config["5Button"] ?? "5Button"){
+                Button(globalString.config["5Button"] ?? "Configure me!"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "") ?? 0)
                     showPopup = true
                 }
@@ -104,7 +104,7 @@ struct entryView: View {
                 .foregroundColor(.orange)
                 
                 Spacer()
-                Button(globalString.config["6Button"] ?? "6Button"){
+                Button(globalString.config["6Button"] ?? "Configure me!"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "") ?? 0)
                     showPopup = true
                 }
@@ -128,12 +128,13 @@ struct entryView: View {
             }
             .popover(isPresented: $showPopup) {
                 ZStack {
-                    Button("Submitted!") {
-                        showPopup = false
-                    }
+                    Text("Submitted!")
                         .font(.system(size: 25))
                         .buttonStyle(.borderedProminent)
                         .tint(.green)
+                        .onAppear(){
+                            showPopup = false
+                        }
                 }.background(BackgroundBlurView())
             }
             

@@ -142,12 +142,13 @@ struct configurationView: View {
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
             ZStack {
-                Button("SUBMITTED!") {
-                    showPopup = false
-                }
+                Text("Submitted!")
                     .font(.system(size: 25))
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
+                    .onAppear(){
+                        showPopup = false
+                    }
             }.background(BackgroundBlurView())
         }
         
@@ -198,7 +199,6 @@ struct editConfigView : View {
     var body : some View {
         VStack {
             Form {
-                Text("Editting \(button)")
                 TextField("Enter Name", text: $foodName)
                 HStack{
                     TextField("Protein (g)", value: $foodValue, format: .number).padding(0)
@@ -216,6 +216,7 @@ struct editConfigView : View {
                     print(foodName)
                     print(foodValue)
                     configHelper(globalString: globalString).saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
+                    showPopup = true
                 }
                 
                 
@@ -228,6 +229,18 @@ struct editConfigView : View {
             print("Refreshing config from storage")
             globalString.reload(date: date)
         }// Ends onAppear
+        .popover(isPresented: $showPopup) {
+            ZStack {
+                Text("Saved!")
+                    .font(.system(size: 25))
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                    .onAppear(){
+                        showPopup = false
+                    }
+            }.background(BackgroundBlurView())
+            
+        }
         
     }
     
