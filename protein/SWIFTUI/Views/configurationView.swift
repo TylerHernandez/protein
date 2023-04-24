@@ -252,26 +252,13 @@ struct configHelper {
     
     func resetToDefaultConfig() {
 
-        // Resetting buttons 1-4 to their default state.
-        var foodName = "1 Milk"
-        var foodValue = 7
-        var button = "1Button"
-        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
-
-        foodName = "2 Eggs/1 Yogurt"
-        foodValue = 12
-        button = "2Button"
-        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
-
-        foodName = "1 Whey"
-        foodValue = 25
-        button = "3Button"
-        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
-
-        foodName = "2 Bread"
-        foodValue = 10
-        button = "4Button"
-        saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
+        // Resetting buttons to their default state.
+        saveToConfig(foodName: "Cup of Milk", foodValue: 8, button: "1Button")
+        saveToConfig(foodName: "4oz Chicken Breast", foodValue: 35, button: "2Button")
+        saveToConfig(foodName: "Scoop of Whey", foodValue: 25, button: "3Button")
+        saveToConfig(foodName: "3 Eggs", foodValue: 18, button: "4Button")
+        saveToConfig(foodName: "Nonfat Greek Yogurt", foodValue: 17, button: "5Button")
+        saveToConfig(foodName: "Protein Bar", foodValue: 20, button: "6Button")
 
     }
     

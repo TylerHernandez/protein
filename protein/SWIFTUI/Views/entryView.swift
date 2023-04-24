@@ -80,7 +80,7 @@ struct entryView: View {
             } // Hstack 1
             HStack {
                 Spacer()
-                Button(globalString.config["4Button"] ?? "3 eggs (18g)"){
+                Button(globalString.config["4Button"] ?? "3 Eggs (18g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "3 eggs (18g)") ?? 0)
                     showPopup = true
                 }
