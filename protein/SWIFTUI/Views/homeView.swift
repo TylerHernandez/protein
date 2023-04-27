@@ -161,7 +161,14 @@ struct homeView: View {
                 
                 Spacer().frame(width: 1, height: 30, alignment: .bottom)
                 
-                HStack(spacing: 50){
+                HStack(spacing: 35){
+                    
+                    NavigationLink(destination: loginView()){
+                        VStack {
+                            Image(systemName: "person.crop.circle")
+                            Text("Profile")
+                        }.font(.title3)
+                    }
                 
                     NavigationLink(destination: calendarView()){
                         VStack {

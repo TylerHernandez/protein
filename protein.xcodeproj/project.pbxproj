@@ -10,6 +10,7 @@
 		15628E3929F1F2FF00D95988 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 15628E3829F1F2FF00D95988 /* AWSCognitoAuthPlugin */; };
 		15628E3B29F1F2FF00D95988 /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 15628E3A29F1F2FF00D95988 /* AWSDataStorePlugin */; };
 		157A9EB829F1F89300A32CDE /* loginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A9EB729F1F89300A32CDE /* loginView.swift */; };
+		157A9EBA29F9FC4A00A32CDE /* registerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A9EB929F9FC4A00A32CDE /* registerView.swift */; };
 		622CB36629C8EE24003B9559 /* entryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CB36529C8EE24003B9559 /* entryView.swift */; };
 		623C9F6E29D0DEBA00925654 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623C9F6D29D0DEBA00925654 /* Entry.swift */; };
 		623C9F7329D0E67500925654 /* configurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623C9F7229D0E67500925654 /* configurationView.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		157A9EB729F1F89300A32CDE /* loginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginView.swift; sourceTree = "<group>"; };
+		157A9EB929F9FC4A00A32CDE /* registerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerView.swift; sourceTree = "<group>"; };
 		622CB36529C8EE24003B9559 /* entryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entryView.swift; sourceTree = "<group>"; };
 		623C9F6D29D0DEBA00925654 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		623C9F7229D0E67500925654 /* configurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = configurationView.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				62D082E129BEE09700E604BD /* calendarView.swift */,
 				622CB36529C8EE24003B9559 /* entryView.swift */,
 				157A9EB729F1F89300A32CDE /* loginView.swift */,
+				157A9EB929F9FC4A00A32CDE /* registerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				157A9EB829F1F89300A32CDE /* loginView.swift in Sources */,
 				623C9F6E29D0DEBA00925654 /* Entry.swift in Sources */,
 				62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */,
+				157A9EBA29F9FC4A00A32CDE /* registerView.swift in Sources */,
 				622CB36629C8EE24003B9559 /* entryView.swift in Sources */,
 				62DDDCAD29CA36040066A932 /* homeView.swift in Sources */,
 			);
