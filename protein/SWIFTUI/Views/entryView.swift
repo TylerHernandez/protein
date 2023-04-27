@@ -38,8 +38,8 @@ struct entryView: View {
             
             HStack {
                 
-                Button(globalString.config["1Button"] ?? "1Button"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "") ?? 0)
+                Button(globalString.config["1Button"] ?? "Cup of Milk (8g)"){
+                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "Cup of Milk (8g)") ?? 0)
                     showPopup = true
                 }
                 .padding(8)
@@ -51,8 +51,8 @@ struct entryView: View {
                 
                 Spacer()
                 
-                Button(globalString.config["2Button"] ?? "2Button"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "") ?? 0)
+                Button(globalString.config["2Button"] ?? "4oz Chicken Breast (35g)"){
+                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "4oz Chicken Breast (35g)") ?? 0)
                     showPopup = true
                 }
                 .padding(8)
@@ -65,8 +65,8 @@ struct entryView: View {
                 
                 Spacer()
                 
-                Button(globalString.config["3Button"] ?? "3Button"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "") ?? 0)
+                Button(globalString.config["3Button"] ?? "Scoop of Whey (25g)"){
+                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "Scoop of Whey (25g)") ?? 0)
                     showPopup = true
                 }
                 .padding(8)
@@ -80,8 +80,8 @@ struct entryView: View {
             } // Hstack 1
             HStack {
                 Spacer()
-                Button(globalString.config["4Button"] ?? "4Button"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "") ?? 0)
+                Button(globalString.config["4Button"] ?? "3 Eggs (18g)"){
+                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "3 eggs (18g)") ?? 0)
                     showPopup = true
                 }
                 .padding(8)
@@ -92,8 +92,8 @@ struct entryView: View {
                 .foregroundColor(.yellow)
                 
                 Spacer()
-                Button(globalString.config["5Button"] ?? "5Button"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "") ?? 0)
+                Button(globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)"){
+                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)") ?? 0)
                     showPopup = true
                 }
                 .padding(8)
@@ -104,8 +104,8 @@ struct entryView: View {
                 .foregroundColor(.orange)
                 
                 Spacer()
-                Button(globalString.config["6Button"] ?? "6Button"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "") ?? 0)
+                Button(globalString.config["6Button"] ?? "Protein Bar (20g)"){
+                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "Protein Bar (20g)") ?? 0)
                     showPopup = true
                 }
                 .padding(8)
@@ -128,12 +128,13 @@ struct entryView: View {
             }
             .popover(isPresented: $showPopup) {
                 ZStack {
-                    Button("Submitted!") {
-                        showPopup = false
-                    }
+                    Button("Submitted!"){}
                         .font(.system(size: 25))
                         .buttonStyle(.borderedProminent)
                         .tint(.green)
+                        .onAppear(){
+                            showPopup = false
+                        }
                 }.background(BackgroundBlurView())
             }
             

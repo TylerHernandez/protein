@@ -113,7 +113,6 @@ struct calendarView: View {
             datePicker()
 
             Spacer()
-                .frame(width: 1, height: 74, alignment: .bottom)
             
         }
             .navigationBarHidden(false)
