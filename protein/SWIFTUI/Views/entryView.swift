@@ -28,6 +28,7 @@ struct entryView: View {
                     removeOldEntry(grams: item.grams)
                 }
                 print("Removing all entries from list")
+                saveProteinToStorage()
                 showPopup = true
             } .padding(8)
                 .frame(width: 130, height: 120, alignment: .center )
@@ -40,6 +41,7 @@ struct entryView: View {
                 
                 Button(globalString.config["1Button"] ?? "Cup of Milk (8g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "Cup of Milk (8g)") ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                 }
                 .padding(8)
@@ -53,6 +55,7 @@ struct entryView: View {
                 
                 Button(globalString.config["2Button"] ?? "4oz Chicken Breast (35g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "4oz Chicken Breast (35g)") ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                 }
                 .padding(8)
@@ -67,6 +70,7 @@ struct entryView: View {
                 
                 Button(globalString.config["3Button"] ?? "Scoop of Whey (25g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "Scoop of Whey (25g)") ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                 }
                 .padding(8)
@@ -82,6 +86,7 @@ struct entryView: View {
                 Spacer()
                 Button(globalString.config["4Button"] ?? "3 Eggs (18g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "3 eggs (18g)") ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                 }
                 .padding(8)
@@ -94,6 +99,7 @@ struct entryView: View {
                 Spacer()
                 Button(globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)") ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                 }
                 .padding(8)
@@ -106,6 +112,7 @@ struct entryView: View {
                 Spacer()
                 Button(globalString.config["6Button"] ?? "Protein Bar (20g)"){
                     addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "Protein Bar (20g)") ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                 }
                 .padding(8)
@@ -142,6 +149,7 @@ struct entryView: View {
             VStack{
                 TextField("Entry Here", text: $entry).frame(width: CGFloat(100), height: CGFloat(30), alignment: .center).onSubmit {
                     addQuickEntry(grams: Int(entry) ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                     entry = ""
                     
@@ -149,6 +157,7 @@ struct entryView: View {
                 
                 TextField("Remove Here", text: $removal).frame(width: CGFloat(120), height: CGFloat(30), alignment: .center).onSubmit {
                     removeOldEntry(grams: Int(removal) ?? 0)
+                    saveProteinToStorage()
                     showPopup = true
                     removal = ""
                 }.keyboardType(.numbersAndPunctuation)
@@ -159,7 +168,18 @@ struct entryView: View {
         
         
     }
-     
+    
+    func saveProteinToStorage() {
+        
+        let defaults = UserDefaults.standard
+        
+        let key = date
+        
+        let storedIntake = String(globalString.intake())
+        
+        defaults.set(storedIntake, forKey: key)
+        
+    }
     
     func removeOldEntry(grams: Int) {
         if grams > 0 { // these nums will never be added.
