@@ -177,17 +177,6 @@ struct homeView: View {
                         }.font(.title3)
                     }
                     
-                    Button { // Action
-                        saveProteinToStorage()
-                        print("Saved protein")
-                        showPopup = true
-                    } label: {
-                        VStack {
-                            Image(systemName: "square.and.arrow.down")
-                            Text("Save")
-                        }.font(.title3)
-                    }
-                    
                     NavigationLink(destination: entryView(date: date.formatted(date: .long, time: .omitted))){
                         VStack {
                             Image(systemName: "plus.app")
@@ -226,17 +215,6 @@ struct homeView: View {
         
     }
     
-    func saveProteinToStorage() {
-        
-        let defaults = UserDefaults.standard
-        
-        let key = (date.formatted(date: .long, time: .omitted))
-        
-        let storedIntake = String(globalString.intake())
-        
-        defaults.set(storedIntake, forKey: key)
-        
-    }
     
     func loadTodayLabel() -> Void {
         if (Calendar.current.isDateInToday(date)){
