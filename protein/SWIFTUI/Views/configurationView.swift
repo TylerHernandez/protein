@@ -15,9 +15,19 @@ struct configurationView: View {
     
     @State private var showPopup = false
     
+    @State private var targetProtein : Int = 0
+    
     
     var body: some View {
         VStack{
+            
+            Form {
+                TextField("Enter Target Protein", value: $targetProtein, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 100, height: 50, alignment: .top)
+            }.onSubmit {
+                saveProteinTargetToStorage()
+            }//.frame(width: 130, height: 60, alignment: .top)
             
             Button ("Reset Config"){
                 configHelper(globalString: globalString).resetToDefaultConfig()
@@ -131,7 +141,7 @@ struct configurationView: View {
                 Spacer()
             } // Hstack 2
             
-            Spacer().frame(width: 1, height: 60, alignment: .bottom)
+            Spacer().frame(width: 1, height: 20, alignment: .bottom)
         } // Ends VStack 1
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
@@ -139,6 +149,8 @@ struct configurationView: View {
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
             globalString.reload(date: date)
+            
+            targetProtein = retrieveProteinTargetFromStorage()
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
             ZStack {
@@ -154,9 +166,34 @@ struct configurationView: View {
         
     }// Ends Body
     
-        // Helper function for finding how much protein is in the title
-        // E.g. "1 test value (18g)" -> 18
-        func stripProteinFrom(str: String) -> Int? {
+    
+    // Retrieves target protein from key "proteinTarget" from storage
+    func retrieveProteinTargetFromStorage() -> Int {
+        
+        let key = "proteinTarget"
+        
+        let defaults = UserDefaults.standard
+        
+        if let data = defaults.string(forKey: key) {
+            return Int(data) ?? 0
+        }
+        
+        return 0
+    }
+    
+    // Saves targetProtein variable to storage under key "proteinTarget"
+    func saveProteinTargetToStorage() {
+        
+        let defaults = UserDefaults.standard
+        
+        let key = "proteinTarget"
+        
+        defaults.set(targetProtein, forKey: key)
+    }
+    
+    // Helper function for finding how much protein is in the title
+    // E.g. "1 test value (18g)" -> 18
+    func stripProteinFrom(str: String) -> Int? {
             var protein = ""
     
             if let startIndex = str.firstIndex(of: "(") {
@@ -226,7 +263,6 @@ struct editConfigView : View {
         }
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
-            print("Refreshing config from storage")
             globalString.reload(date: date)
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
