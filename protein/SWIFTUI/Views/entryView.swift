@@ -148,7 +148,7 @@ struct entryView: View {
             Spacer().frame(width: 1, height: 40, alignment: .bottom)
             VStack{
                 TextField("Entry Here", text: $entry).frame(width: CGFloat(100), height: CGFloat(30), alignment: .center).onSubmit {
-                    addQuickEntry(grams: Int(entry) ?? 0)
+                    addQuickEntry(grams: evaluateExpression(entry: entry))
                     saveProteinToStorage()
                     showPopup = true
                     entry = ""
@@ -166,6 +166,33 @@ struct entryView: View {
             Spacer().frame(width: 1, height: 120, alignment: .bottom)
 
         
+        
+    }
+    
+    func evaluateExpression(entry: String) -> Int {
+        
+        let containsAddition = entry.contains("+")
+        let containsMultiplication = entry.contains("*")
+        
+        // Prevent doing multiplication and addition in same expression.
+        guard !(containsAddition && containsMultiplication) else {return 0}
+        
+        
+        if (entry.contains("+")) {
+            let components = entry.components(separatedBy: "+")
+            
+            let added = (Int(components[0]) ?? 0) + (Int(components[1]) ?? 0)
+            return added
+        }
+        
+        if (entry.contains("*")) {
+            let components = entry.components(separatedBy: "*")
+            
+            let multiplied = (Int(components[0]) ?? 0) * (Int(components[1]) ?? 0)
+            return multiplied
+        }
+        
+        return (Int(entry) ?? 0)
         
     }
     
