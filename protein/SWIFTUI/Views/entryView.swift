@@ -148,7 +148,7 @@ struct entryView: View {
             Spacer().frame(width: 1, height: 40, alignment: .bottom)
             VStack{
                 TextField("Entry Here", text: $entry).frame(width: CGFloat(100), height: CGFloat(30), alignment: .center).onSubmit {
-                    addQuickEntry(grams: evaluateExpression(entry: entry))
+                    addQuickEntry(grams: evaluateMathExpression(entry))
                     saveProteinToStorage()
                     showPopup = true
                     entry = ""
@@ -168,32 +168,102 @@ struct entryView: View {
         
         
     }
-    
-    func evaluateExpression(entry: String) -> Int {
+
+    func evaluateMathExpression(_ expression: String) -> Int {
+        let expression = expression.replacingOccurrences(of: " ", with: "") // Remove any spaces in the expression
         
-        let containsAddition = entry.contains("+")
-        let containsMultiplication = entry.contains("*")
-        
-        // Prevent doing multiplication and addition in same expression.
-        guard !(containsAddition && containsMultiplication) else {return 0}
-        
-        
-        if (entry.contains("+")) {
-            let components = entry.components(separatedBy: "+")
-            
-            let added = (Int(components[0]) ?? 0) + (Int(components[1]) ?? 0)
-            return added
+        if let result = evaluate(expression) {
+            return Int(result)
         }
         
-        if (entry.contains("*")) {
-            let components = entry.components(separatedBy: "*")
-            
-            let multiplied = (Int(components[0]) ?? 0) * (Int(components[1]) ?? 0)
-            return multiplied
+        return 0
+    }
+
+    private func evaluate(_ expression: String) -> Double? {
+        let expression = expression.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if let result = evaluateParentheses(expression) {
+            return result
         }
         
-        return (Int(entry) ?? 0)
+        return evaluateWithoutParentheses(expression)
+    }
+
+    private func evaluateParentheses(_ expression: String) -> Double? {
+        var expression = expression
         
+        while let startIndex = expression.lastIndex(of: "(") {
+            var endIndex: String.Index?
+            
+            for (index, char) in expression.enumerated() {
+                let utf16Offset = expression.utf16.distance(from: expression.startIndex, to: startIndex)
+                if index > utf16Offset && char == ")" {
+                    endIndex = expression.index(expression.startIndex, offsetBy: index)
+                    break
+                }
+            }
+            
+            if let endIndex = endIndex {
+                let range = expression.index(after: startIndex)..<endIndex
+                let subExpression = String(expression[range])
+                if let subResult = evaluateWithoutParentheses(subExpression) {
+                    expression.replaceSubrange(startIndex...endIndex, with: "\(subResult)")
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        }
+        
+        return evaluateWithoutParentheses(expression)
+    }
+
+    private func evaluateWithoutParentheses(_ expression: String) -> Double? {
+        let expression = expression.trimmingCharacters(in: .whitespacesAndNewlines)
+        var numberString = ""
+        var numbers: [Double] = []
+        var operators: [Character] = []
+        
+        for char in expression {
+            if char.isNumber || char == "." || (numberString.isEmpty && char == "-") {
+                numberString.append(char)
+            } else if let number = Double(numberString) {
+                numbers.append(number)
+                numberString = ""
+                operators.append(char)
+            } else {
+                return nil
+            }
+        }
+        
+        if let number = Double(numberString) {
+            numbers.append(number)
+        } else {
+            return nil
+        }
+        
+        var result = numbers[0]
+        
+        for i in 0..<operators.count {
+            let operatorChar = operators[i]
+            let number = numbers[i + 1]
+            
+            switch operatorChar {
+            case "+":
+                result += number
+            case "-":
+                result -= number
+            case "*":
+                result *= number
+            case "/":
+                result /= number
+            default:
+                return nil
+            }
+        }
+        
+        return result
     }
     
     func saveProteinToStorage() {
