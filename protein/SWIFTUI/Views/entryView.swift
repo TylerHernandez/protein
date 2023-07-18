@@ -168,7 +168,7 @@ struct entryView: View {
         
         
     }
-
+    
     func evaluateMathExpression(_ expression: String) -> Int {
         let expression = expression.replacingOccurrences(of: " ", with: "") // Remove any spaces in the expression
         
@@ -194,12 +194,18 @@ struct entryView: View {
         
         while let startIndex = expression.lastIndex(of: "(") {
             var endIndex: String.Index?
+            var parenthesesCount = 0
             
             for (index, char) in expression.enumerated() {
-                let utf16Offset = expression.utf16.distance(from: expression.startIndex, to: startIndex)
-                if index > utf16Offset && char == ")" {
-                    endIndex = expression.index(expression.startIndex, offsetBy: index)
-                    break
+                if char == "(" {
+                    parenthesesCount += 1
+                } else if char == ")" {
+                    parenthesesCount -= 1
+                    
+                    if parenthesesCount == 0 {
+                        endIndex = expression.index(expression.startIndex, offsetBy: index)
+                        break
+                    }
                 }
             }
             
@@ -243,23 +249,43 @@ struct entryView: View {
             return nil
         }
         
+        // Evaluate multiplication and division first
+        var index = 0
+        while index < operators.count {
+            let operatorChar = operators[index]
+            if operatorChar == "*" || operatorChar == "/" {
+                let number1 = numbers[index]
+                let number2 = numbers[index + 1]
+                var result: Double
+                
+                if operatorChar == "*" {
+                    result = number1 * number2
+                } else {
+                    if number2 == 0 {
+                        return nil // Division by zero error
+                    }
+                    result = number1 / number2
+                }
+                
+                // Update numbers and operators arrays
+                numbers[index] = result
+                numbers.remove(at: index + 1)
+                operators.remove(at: index)
+            } else {
+                index += 1
+            }
+        }
+        
+        // Evaluate addition and subtraction
         var result = numbers[0]
         
-        for i in 0..<operators.count {
-            let operatorChar = operators[i]
-            let number = numbers[i + 1]
+        for (index, operatorChar) in operators.enumerated() {
+            let number = numbers[index + 1]
             
-            switch operatorChar {
-            case "+":
+            if operatorChar == "+" {
                 result += number
-            case "-":
+            } else {
                 result -= number
-            case "*":
-                result *= number
-            case "/":
-                result /= number
-            default:
-                return nil
             }
         }
         
