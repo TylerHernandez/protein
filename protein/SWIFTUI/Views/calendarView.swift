@@ -175,9 +175,8 @@ struct showTrendView: View {
             currentDate = Calendar.current.date(byAdding: .day, value: -daysAgo, to: date)!
             
             
-            if let value = Int(loadProteinFromStorage(date: currentDate)){
-                totalGrams += value
-                //print("\(currentDate) - \(value)")
+            if let value = loadProteinFromStorage(date: currentDate){
+                totalGrams += Int(value) ?? 0
             } else {
                 return "Past \(days) days: Unavailable Trend"
             }
@@ -187,17 +186,13 @@ struct showTrendView: View {
         return "Past \(days) days: Average \(totalGrams / days) grams per day"
     }
     
-    func loadProteinFromStorage(date: Date) -> String {
+    func loadProteinFromStorage(date: Date) -> String? {
 
         let defaults = UserDefaults.standard
 
         let key = (date.formatted(date: .long, time: .omitted))
 
-        if let storedIntake = defaults.string(forKey: key) {
-            return storedIntake
-        } else {
-            return "0"
-        }
+        return defaults.string(forKey: key)
     }
     
 }

@@ -30,34 +30,41 @@ struct graphView: View {
         
         dateFormatter.dateFormat = "MMM d"
         
+        var noValueCount = 0 // Keep track of how many days were given default '0' values.
+        
         // Start off with day before and work back x days.
         for daysAgo in 1 ... days {
+            
+            
+            
             currentDate = Calendar.current.date(byAdding: .day, value: -daysAgo, to: date)!
             
             // Append found value to list alongside it's date.
-            if let value = Int(loadProteinFromStorage(date: currentDate)){
-                data.append(ProteinData(date: dateFormatter.string(from: currentDate), gramsConsumed: value))
+            if let value = loadProteinFromStorage(date: currentDate){
+                data.append(ProteinData(date: dateFormatter.string(from: currentDate), gramsConsumed: Int(value) ?? 0))
                 
             } else {
+                noValueCount += 1
                 data.append(ProteinData(date: dateFormatter.string(from: currentDate), gramsConsumed: 0))
             }
             
         }
         
+        // Prevent a chart from displaying data if more than 1/3 of data is missing.
+        if noValueCount > days / 3 {
+            return []
+        }
+        
         return data.sorted { $0.date < $1.date } // Sort the data chronologically
     }
     
-    func loadProteinFromStorage(date: Date) -> String {
+    func loadProteinFromStorage(date: Date) -> String? {
 
         let defaults = UserDefaults.standard
 
         let key = (date.formatted(date: .long, time: .omitted))
 
-        if let storedIntake = defaults.string(forKey: key) {
-            return storedIntake
-        } else {
-            return "0"
-        }
+        return defaults.string(forKey: key)
     }
     
 }
