@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 extension DateComponents: Comparable {
     public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
@@ -144,23 +145,24 @@ struct showTrendView: View {
     var body: some View {
         
         VStack(spacing: 20) {
-                    NavigationLink(destination: detailView(text: generateTrend(days: 7))) {
-                        Text(generateTrend(days: 7))
-                    }
-            NavigationLink(destination: detailView(text: generateTrend(days: 14))) {
+            NavigationLink(destination: graphView(previousDays: 7))  {
+                Text(generateTrend(days: 7))
+            }
+            NavigationLink(destination: graphView(previousDays: 14))  {
                 Text(generateTrend(days: 14))
             }
-            NavigationLink(destination: detailView(text: generateTrend(days: 30))) {
+            NavigationLink(destination: graphView(previousDays: 30))  {
                 Text(generateTrend(days: 30))
             }
-            NavigationLink(destination: detailView(text: generateTrend(days: 60))) {
+            NavigationLink(destination: graphView(previousDays: 60))  {
                 Text(generateTrend(days: 60))
             }
-            NavigationLink(destination: detailView(text: generateTrend(days: 90))) {
+            NavigationLink(destination: graphView(previousDays: 90))  {
                 Text(generateTrend(days: 90))
             }
-                }
-    }
+        }// vstack
+        
+    }// body
     
     // Past 7 days.
     func generateTrend(days: Int) -> String {
@@ -196,17 +198,6 @@ struct showTrendView: View {
         } else {
             return "0"
         }
-    }
-    
-}
-
-struct detailView: View {
-    
-    var text: String
-
-    var body: some View {
-        Text(text)
-            .navigationBarTitle("Detail")
     }
     
 }
