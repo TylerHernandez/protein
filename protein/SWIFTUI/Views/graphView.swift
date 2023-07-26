@@ -82,6 +82,7 @@ struct PlotView: View {
                                     x: .value("Date", $0.date),
                                     y: .value("Grams Consumed", $0.gramsConsumed)
                                 )
+                                .foregroundStyle(by: .value("Grams Consumed", $0.gramsConsumed))
                             }
                             RuleMark(y: .value("Goal", 180))
                                 .foregroundStyle(.green)
@@ -96,7 +97,6 @@ struct PlotView: View {
                                     AxisMarks(preset: .automatic, position: .trailing)
                                     }
                         .frame(width: CGFloat( log(1.0 + Double(proteinData.count) / 2.65) * 300))
-                    
                 
             }
         } else {
