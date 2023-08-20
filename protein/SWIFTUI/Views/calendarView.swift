@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 extension DateComponents: Comparable {
     public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
@@ -37,8 +38,15 @@ struct datePicker: View {
     
     @State public var dates: Set<DateComponents> = []
     
+    @State private var showPopup = false
+    
     var body: some View {
         VStack{
+            
+            Button("Trends") {
+                showPopup = true
+            }
+            
             MultiDatePicker("Dates Available", selection: $dates, in: bounds)
                 .fixedSize()
             
@@ -56,6 +64,13 @@ struct datePicker: View {
             Text("total sum across \(dates.count) entries: \(sumEntries())")
             
             Text("Average:  \(retrieveAverageFromSelected())")
+        }
+        .popover(isPresented: $showPopup) {
+                NavigationView {
+                    showTrendView()
+                    .navigationBarTitle("Trends")
+                }
+                
         }
         
     }
@@ -122,8 +137,70 @@ struct calendarView: View {
     } // ends view
 }
 
+
+struct showTrendView: View {
+    
+    @State private var date = Calendar.current.startOfDay(for: Date.now)
+    
+    var body: some View {
+        
+        VStack(spacing: 20) {
+            NavigationLink(destination: graphView(previousDays: 7))  {
+                Text(generateTrend(days: 7))
+            }
+            NavigationLink(destination: graphView(previousDays: 14))  {
+                Text(generateTrend(days: 14))
+            }
+            NavigationLink(destination: graphView(previousDays: 30))  {
+                Text(generateTrend(days: 30))
+            }
+            NavigationLink(destination: graphView(previousDays: 60))  {
+                Text(generateTrend(days: 60))
+            }
+            NavigationLink(destination: graphView(previousDays: 90))  {
+                Text(generateTrend(days: 90))
+            }
+        }// vstack
+        
+    }// body
+    
+    // Past 7 days.
+    func generateTrend(days: Int) -> String {
+        
+        var totalGrams = 0
+        var currentDate = date
+        
+        // Start off with day before and work back x days.
+        for daysAgo in 1 ... days {
+            currentDate = Calendar.current.date(byAdding: .day, value: -daysAgo, to: date)!
+            
+            
+            if let value = loadProteinFromStorage(date: currentDate){
+                totalGrams += Int(value) ?? 0
+            } else {
+                return "Past \(days) days: Unavailable Trend"
+            }
+            
+        }
+        
+        return "Past \(days) days: Average \(totalGrams / days) grams per day"
+    }
+    
+    func loadProteinFromStorage(date: Date) -> String? {
+
+        let defaults = UserDefaults.standard
+
+        let key = (date.formatted(date: .long, time: .omitted))
+
+        return defaults.string(forKey: key)
+    }
+    
+}
+
 struct calendarView_Previews: PreviewProvider {
     static var previews: some View {
         calendarView().preferredColorScheme(.dark)
     }
 }
+
+
