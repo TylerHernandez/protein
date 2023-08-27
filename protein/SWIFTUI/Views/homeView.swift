@@ -113,6 +113,13 @@ struct homeView: View {
     
     @State private var showPopup = false
     
+    @State private var activeEntry: Int = 0
+    
+    @State private var modifiedEntry: String = ""
+    
+    @State private var isModifyingEntryPopoverPresented = false
+    
+    
     var body: some View {
         NavigationView {
             
@@ -148,10 +155,29 @@ struct homeView: View {
                 
                 Text(todayLabel).foregroundColor(.blue)
                 
+                /*
+                 *
+                 *
+                 *
+                 *
+                 *
+                                                !Display our list of entries!
+                 *
+                 *
+                 *
+                 *
+                 *
+                 */
+                
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
                         Text("\(entry.grams)")
+                            .onLongPressGesture {
+                                activeEntry = entry.grams
+                                isModifyingEntryPopoverPresented = true
+                            }
                     }
+                    .onDelete(perform: deleteEntry)
                 }.onAppear {
                     globalString.reload(date: date.formatted(date: .long, time: .omitted))
                 }
@@ -191,6 +217,37 @@ struct homeView: View {
             }// Ends VStack
             .navigationTitle("Home")
             .onAppear(perform: loadTodayLabel)
+            
+            // Popover for modifying an entry.
+            .popover(isPresented: $isModifyingEntryPopoverPresented) {
+                    VStack {
+                        
+                        Group{
+                            Text("Modify Entry")
+                            Text("Changing: \(activeEntry)")
+                                .onAppear(){
+                                    // Our state view does not always refresh.
+                                    let placeholder = activeEntry
+                                    activeEntry = 0
+                                    activeEntry = placeholder
+                                    // the previous code reminds it to refresh :)
+                            }
+                        }
+                        
+                        TextField("Enter new value", text: $modifiedEntry)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                        Button("Save") {
+                            if let newEntryValue = Int(modifiedEntry) {
+                                modifyEntryAndSaveToList(grams: activeEntry, newEntry: Entry(grams: newEntryValue))
+                                isModifyingEntryPopoverPresented = false
+                                modifiedEntry = ""
+                            }
+                        }
+                    }
+                    .padding()
+                }
+            // "Saved" popup
             .popover(isPresented: $showPopup) {
                 ZStack {
                     Button("Saved!"){}
@@ -202,17 +259,30 @@ struct homeView: View {
                     }
                 }.background(BackgroundBlurView())
             }
+            
         }// Navigation View
         
     }
     
-   // Save our list of entries to storage with our given timestamp.
-    func saveListOfEntriesToStorage() {
-        // Given a
+    func modifyEntryAndSaveToList(grams: Int, newEntry: Entry) {
+        
+        if grams > 0 { // these nums will never be added.
+            if let index = globalString.listOfEntries.findEntry(Entry: grams) {
+                globalString.listOfEntries.remove(at: index)
+                
+                // now replace
+                globalString.listOfEntries.insert(newEntry, at: index)
+            }
+
+        }
+
+        globalString.saveListToStorage(date: date.formatted(date: .long, time: .omitted))
+
     }
     
-    func loadListOfEntriesFromStorage() {
-        
+    func deleteEntry(at offsets: IndexSet) {
+        globalString.listOfEntries.remove(atOffsets: offsets)
+        globalString.saveListToStorage(date: date.formatted(date: .long, time: .omitted))
     }
     
     
