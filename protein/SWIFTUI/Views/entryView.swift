@@ -155,12 +155,6 @@ struct entryView: View {
                     
                 }.keyboardType(.numbersAndPunctuation)
                 
-                TextField("Remove Here", text: $removal).frame(width: CGFloat(120), height: CGFloat(30), alignment: .center).onSubmit {
-                    removeOldEntry(grams: Int(removal) ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                    removal = ""
-                }.keyboardType(.numbersAndPunctuation)
             } // Vstack 2
             
             Spacer().frame(width: 1, height: 120, alignment: .bottom)

@@ -237,6 +237,7 @@ struct homeView: View {
                         TextField("Enter new value", text: $modifiedEntry)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding()
+                            .keyboardType(.numbersAndPunctuation)
                         Button("Save") {
                             if let newEntryValue = Int(modifiedEntry) {
                                 modifyEntryAndSaveToList(grams: activeEntry, newEntry: Entry(grams: newEntryValue))
