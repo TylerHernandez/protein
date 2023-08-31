@@ -105,7 +105,7 @@ class GlobalString: ObservableObject {
 }
 
 struct homeView: View {
-    @StateObject var globalString = GlobalString()
+    @StateObject var globalString : GlobalString
     
     @State private var date = Calendar.current.startOfDay(for: Date.now)
     
@@ -317,8 +317,8 @@ struct homeView: View {
 
 }
 
-struct homeView_Previews: PreviewProvider {
-    static var previews: some View {
-        homeView().preferredColorScheme(.dark)
-    }
-}
+//struct homeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        homeView().preferredColorScheme(.dark)
+//    }
+//}
