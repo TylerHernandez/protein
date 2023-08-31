@@ -33,7 +33,6 @@ struct ProteinApp: App {
                         
                         let date = Calendar.current.startOfDay(for: Date())
                         addQuickEntry(date: date.formatted(date: .long, time: .omitted), grams: grams)
-                        // TODO: Refresh homeView's list now. (pass globalString through homeView call?)
                     }
                 }
             }
@@ -41,7 +40,6 @@ struct ProteinApp: App {
     }
     
     func addQuickEntry(date: String, grams: Int) {
-        
         guard grams > 0 else { return }
         
         // Need to reload our globalString in order to access up to date values.
