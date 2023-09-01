@@ -43,8 +43,14 @@ struct datePicker: View {
     var body: some View {
         VStack{
             
-            Button("Trends") {
-                showPopup = true
+            HStack(spacing: 20) {
+                
+                Button("See Trends") {
+                    showPopup = true
+                }
+                
+                NavigationLink("Import/Export", destination: importExportView())
+                
             }
             
             MultiDatePicker("Dates Available", selection: $dates, in: bounds)
