@@ -189,7 +189,7 @@ struct homeView: View {
                 
                 HStack(spacing: 50){
                 
-                    NavigationLink(destination: calendarView()){
+                    NavigationLink(destination: calendarView(globalString: globalString)){
                         VStack {
                             Image(systemName: "book")
                             Text("History")

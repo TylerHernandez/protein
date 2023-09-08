@@ -9,14 +9,13 @@ import SwiftUI
 
 struct importExportView: View {
     
-    var globalString = GlobalString()
     
     // Have user choose whether they will be importing or exporting history.
     var body: some View {
         VStack(spacing: 20) {
             
-            NavigationLink("Import Data", destination: importView(globalString: globalString))
-            NavigationLink("Export Data", destination: exportView(globalString: globalString))
+            NavigationLink("Import Data", destination: importView())
+            NavigationLink("Export Data", destination: exportView())
             
         }
         
@@ -25,7 +24,6 @@ struct importExportView: View {
 
 struct importView: View {
     
-    var globalString: GlobalString
     @State private var importedJSON: String = ""
     
     var body: some View{
@@ -61,7 +59,6 @@ struct importView: View {
 
 struct exportView: View {
     
-    var globalString: GlobalString
     @State private var startDate: Date = Date()
     @State private var endDate: Date = Date()
     @State private var exportedJSON: String = ""
