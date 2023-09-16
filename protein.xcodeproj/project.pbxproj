@@ -19,6 +19,7 @@
 		62D082E229BEE09700E604BD /* calendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D082E129BEE09700E604BD /* calendarView.swift */; };
 		62DDDCAD29CA36040066A932 /* homeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DDDCAC29CA36040066A932 /* homeView.swift */; };
 		62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DDDCAE29CA47440066A932 /* proteinApp.swift */; };
+		62F8462A2AB60B7E00F3EECD /* math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F846292AB60B7E00F3EECD /* math.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		62D082E129BEE09700E604BD /* calendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calendarView.swift; sourceTree = "<group>"; };
 		62DDDCAC29CA36040066A932 /* homeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeView.swift; sourceTree = "<group>"; };
 		62DDDCAE29CA47440066A932 /* proteinApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proteinApp.swift; sourceTree = "<group>"; };
+		62F846292AB60B7E00F3EECD /* math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = math.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 		623C9F7029D0E53B00925654 /* Structs */ = {
 			isa = PBXGroup;
 			children = (
+				62F846292AB60B7E00F3EECD /* math.swift */,
 				623C9F6D29D0DEBA00925654 /* Entry.swift */,
 			);
 			path = Structs;
@@ -293,6 +296,7 @@
 				6271FBA72AA2861700ADA4C9 /* importExportView.swift in Sources */,
 				623C9F7329D0E67500925654 /* configurationView.swift in Sources */,
 				623C9F6E29D0DEBA00925654 /* Entry.swift in Sources */,
+				62F8462A2AB60B7E00F3EECD /* math.swift in Sources */,
 				62C11E592A6A02B50085B401 /* graphView.swift in Sources */,
 				62DDDCAF29CA47440066A932 /* proteinApp.swift in Sources */,
 				622CB36629C8EE24003B9559 /* entryView.swift in Sources */,

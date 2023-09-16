@@ -187,7 +187,7 @@ struct homeView: View {
                 }
                 
                 
-                Text("Total : \(totalSum()) grams").font(.title2)
+                Text("Total: \(totalSum()) grams").font(.title2)
                 
                 Spacer().frame(width: 1, height: 30, alignment: .bottom)
                 
@@ -243,11 +243,9 @@ struct homeView: View {
                             .padding()
                             .keyboardType(.numbersAndPunctuation)
                         Button("Save") {
-                            if let newEntryValue = Int(modifiedEntry) {
-                                modifyEntryAndSaveToList(grams: activeEntry, newEntry: Entry(grams: newEntryValue))
-                                isModifyingEntryPopoverPresented = false
-                                modifiedEntry = ""
-                            }
+                            modifyEntryAndSaveToList(oldEntryGrams: activeEntry, newEntry: modifiedEntry)
+                            isModifyingEntryPopoverPresented = false
+                            modifiedEntry = ""
                         }
                     }
                     .padding()
@@ -269,14 +267,16 @@ struct homeView: View {
         
     }
     
-    func modifyEntryAndSaveToList(grams: Int, newEntry: Entry) {
+    func modifyEntryAndSaveToList(oldEntryGrams: Int, newEntry: String) {
         
-        if grams > 0 { // these nums will never be added.
-            if let index = globalString.listOfEntries.findEntry(Entry: grams) {
+        let newEntryGrams = Math.evaluateMathExpression(newEntry)
+        
+        if newEntryGrams > 0 { // these nums will never be added.
+            if let index = globalString.listOfEntries.findEntry(Entry: oldEntryGrams) {
                 globalString.listOfEntries.remove(at: index)
-                
+
                 // now replace
-                globalString.listOfEntries.insert(newEntry, at: index)
+                globalString.listOfEntries.insert(Entry(grams: newEntryGrams), at: index)
             }
 
         }
