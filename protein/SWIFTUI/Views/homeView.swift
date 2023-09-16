@@ -171,11 +171,15 @@ struct homeView: View {
                 
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
-                        Text("\(entry.grams)")
-                            .onLongPressGesture {
-                                activeEntry = entry.grams
-                                isModifyingEntryPopoverPresented = true
-                            }
+                        HStack {
+                            Text("\(entry.grams)")
+                            Spacer() // Occupies entire cell with empty but clickable content.s
+                        }
+                        .contentShape(Rectangle()) // Ensures the entire cell area is tappable
+                        .onLongPressGesture {
+                            activeEntry = entry.grams
+                            isModifyingEntryPopoverPresented = true
+                        }
                     }
                     .onDelete(perform: deleteEntry)
                 }.onAppear {
@@ -183,7 +187,7 @@ struct homeView: View {
                 }
                 
                 
-                Text("Total Sum: \(totalSum()) grams").font(.title2)
+                Text("Total : \(totalSum()) grams").font(.title2)
                 
                 Spacer().frame(width: 1, height: 30, alignment: .bottom)
                 
