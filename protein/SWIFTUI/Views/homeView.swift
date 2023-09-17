@@ -172,19 +172,42 @@ struct homeView: View {
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
                         HStack {
+                            Button(action: {
+                                // Modify action
+                                activeEntry = entry.grams
+                                isModifyingEntryPopoverPresented = true
+                            }) {
+                                Image(systemName: "pencil")
+                                    .foregroundColor(.blue)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
+                            Spacer() // Pushes content to the sides
                             Text("\(entry.grams)")
-                            Spacer() // Occupies entire cell with empty but clickable content.s
+                            Spacer() // Pushes content to the sides
+                            Button(action: {
+                                // Delete action
+                                if let index = globalString.listOfEntries.firstIndex(where: { $0.id == entry.id }) {
+                                    deleteEntry(at: IndexSet(integer: index))
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                            .buttonStyle(PlainButtonStyle()) // Makes the button look like a regular icon
                         }
-                        .contentShape(Rectangle()) // Ensures the entire cell area is tappable
+                        .contentShape(Rectangle()) // Ensures the entire hstack cell area is tappable
                         .onLongPressGesture {
                             activeEntry = entry.grams
                             isModifyingEntryPopoverPresented = true
                         }
                     }
-                    .onDelete(perform: deleteEntry)
-                }.onAppear {
+                }
+                .onAppear {
                     globalString.reload(date: date.formatted(date: .long, time: .omitted))
                 }
+
+
                 
                 
                 Text("Total: \(totalSum()) grams").font(.title2)
