@@ -119,6 +119,8 @@ struct homeView: View {
     
     @State private var isModifyingEntryPopoverPresented = false
     
+    @State private var isEditMode: EditMode = .inactive
+    
     
     var body: some View {
         NavigationView {
@@ -180,34 +182,21 @@ struct homeView: View {
                                 Image(systemName: "pencil")
                                     .foregroundColor(.blue)
                             }
-                            .buttonStyle(PlainButtonStyle())
 
-                            Spacer() // Pushes content to the sides
+                            Spacer()
                             Text("\(entry.grams)")
-                            Spacer() // Pushes content to the sides
-                            Button(action: {
-                                // Delete action
-                                if let index = globalString.listOfEntries.firstIndex(where: { $0.id == entry.id }) {
-                                    deleteEntry(at: IndexSet(integer: index))
-                                }
-                            }) {
-                                Image(systemName: "trash")
-                                    .foregroundColor(.red)
-                            }
-                            .buttonStyle(PlainButtonStyle()) // Makes the button look like a regular icon
-                        }
-                        .contentShape(Rectangle()) // Ensures the entire hstack cell area is tappable
-                        .onLongPressGesture {
-                            activeEntry = entry.grams
-                            isModifyingEntryPopoverPresented = true
+                            Spacer()
+                            Image(systemName: "line.horizontal.3") // Hamburger icon
+                                            .foregroundColor(.gray)
                         }
                     }
+                    .onMove(perform: moveEntry)
+                    .onDelete(perform: deleteEntry)
                 }
                 .onAppear {
                     globalString.reload(date: date.formatted(date: .long, time: .omitted))
                 }
-
-
+                .environment(\.editMode, $isEditMode)
                 
                 
                 Text("Total: \(totalSum()) grams").font(.title2)
@@ -250,14 +239,17 @@ struct homeView: View {
                     VStack {
                         
                         Group{
-                            Text("Modify Entry")
-                            Text("Changing: \(activeEntry)")
-                                .onAppear(){
-                                    // Our state view does not always refresh.
-                                    let placeholder = activeEntry
-                                    activeEntry = 0
-                                    activeEntry = placeholder
-                                    // the previous code reminds it to refresh :)
+                            Text("Modifying entry: ")
+                            
+                            HStack {
+                                Text("\(activeEntry)")
+                                    .onAppear(){
+                                        // Our state view does not always refresh.
+                                        let placeholder = activeEntry
+                                        activeEntry = 0
+                                        activeEntry = placeholder
+                                        // the previous code reminds it to refresh :)
+                                    }
                             }
                         }
                         
@@ -286,6 +278,18 @@ struct homeView: View {
                 }.background(BackgroundBlurView())
             }
             
+            .navigationBarItems(trailing: Button(action: {
+                        withAnimation {
+                            if self.isEditMode == .inactive {
+                                self.isEditMode = .active
+                            } else {
+                                self.isEditMode = .inactive
+                            }
+                        }
+                    }) {
+                        Text(self.isEditMode == .inactive ? "Edit" : "Done")
+                    })
+            
         }// Navigation View
         
     }
@@ -310,6 +314,11 @@ struct homeView: View {
     
     func deleteEntry(at offsets: IndexSet) {
         globalString.listOfEntries.remove(atOffsets: offsets)
+        globalString.saveListToStorage(date: date.formatted(date: .long, time: .omitted))
+    }
+    
+    func moveEntry(from source: IndexSet, to destination: Int) {
+        globalString.listOfEntries.move(fromOffsets: source, toOffset: destination)
         globalString.saveListToStorage(date: date.formatted(date: .long, time: .omitted))
     }
     
