@@ -17,139 +17,48 @@ struct configurationView: View {
     
     
     var body: some View {
-        VStack{
-            
-            Button ("Reset Config"){
-                configHelper(globalString: globalString).resetToDefaultConfig()
-            }
-            
-            
-            HStack {
-                Spacer()
+        ScrollView {
+            VStack {
                 
-                NavigationLink (globalString.config["1Button"] ?? "Configure me"){
-                    editConfigView(date: date,
-                                   button: "1Button",
-                                   foodName: stripTitleFrom(str: globalString.config["1Button"] ?? ""),
-                                   foodValue: stripProteinFrom(str: globalString.config["1Button"] ?? "") ?? 0,
-                                   showPopup: false
-                    )
+                let sortedKeys = globalString.config.keys.sorted {
+                    globalString.config[$0]! < globalString.config[$1]!
                 }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.blue)
                 
-                Spacer()
-                
-                NavigationLink (globalString.config["2Button"] ?? "Configure me"){
-                    editConfigView(date: date,
-                                   button: "2Button",
-                                   foodName: stripTitleFrom(str: globalString.config["2Button"] ?? ""),
-                                   foodValue: stripProteinFrom(str: globalString.config["2Button"] ?? "") ?? 0,
-                                   showPopup: false
-                    )
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.red)
-                
-                
-                Spacer()
-                
-                NavigationLink (globalString.config["3Button"] ?? "Configure me"){
-                    editConfigView(date: date,
-                                   button: "3Button",
-                                   foodName: stripTitleFrom(str: globalString.config["3Button"] ?? ""),
-                                   foodValue: stripProteinFrom(str: globalString.config["3Button"] ?? "") ?? 0,
-                                   showPopup: false
-                    )
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.green)
-                
-                Spacer()
-            } // Hstack 1
-            HStack {
-                Spacer()
-                NavigationLink (globalString.config["4Button"] ?? "Configure me"){
-                    editConfigView(date: date,
-                                   button: "4Button",
-                                   foodName: stripTitleFrom(str: globalString.config["4Button"] ?? ""),
-                                   foodValue: stripProteinFrom(str: globalString.config["4Button"] ?? "") ?? 0,
-                                   showPopup: false
-                    )
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.yellow)
-                
-                Spacer()
-                NavigationLink (globalString.config["5Button"] ?? "Configure me"){
-                    editConfigView(date: date,
-                                   button: "5Button",
-                                   foodName: stripTitleFrom(str: globalString.config["5Button"] ?? ""),
-                                   foodValue: stripProteinFrom(str: globalString.config["5Button"] ?? "") ?? 0,
-                                   showPopup: false
-                    )
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.orange)
-                
-                Spacer()
-                NavigationLink (globalString.config["6Button"] ?? "Configure me"){
-                    editConfigView(date: date,
-                                   button: "6Button",
-                                   foodName: stripTitleFrom(str: globalString.config["6Button"] ?? ""),
-                                   foodValue: stripProteinFrom(str: globalString.config["6Button"] ?? "") ?? 0,
-                                   showPopup: false
-                    )
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.purple)
-                
-                Spacer()
-            } // Hstack 2
-            
-            Spacer().frame(width: 1, height: 60, alignment: .bottom)
-        } // Ends VStack 1
-        .navigationBarHidden(false)
-        .navigationBarBackButtonHidden(false)
-        .navigationTitle("Configuration")
-        .onAppear {
-            // Need to reload string with most up to date listOfEntries or it will be empty.
-            globalString.reload(date: date)
-        }// Ends onAppear
-        .popover(isPresented: $showPopup) {
-            ZStack {
-                Button("Submitted"){}
-                    .font(.system(size: 25))
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
-                    .onAppear(){
-                        showPopup = false
+                // Loop through the sorted keys
+                ForEach(Array(sortedKeys.enumerated()), id: \.offset) { index, key in
+                    if index % 2 == 0 { // Only start a new HStack for even indices
+                        HStack {
+                            // Use the key to get the value and create the button
+                            if let value = globalString.config[key] {
+                                configButton(value: value, key: key)
+                            }
+                            
+                            // Check if there's a next button
+                            if index + 1 < sortedKeys.count {
+                                let nextKey = sortedKeys[index + 1]
+                                if let nextValue = globalString.config[nextKey] {
+                                    configButton(value: nextValue, key: nextKey)
+                                }
+                            }
+                        }
                     }
-            }.background(BackgroundBlurView())
+                }
+                
+                Button("Add New Config") {
+                    addNewConfig()
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                
+            } // Ends VStack
+            .navigationBarHidden(false)
+            .navigationBarBackButtonHidden(false)
+            .navigationTitle("Configuration")
+            .onAppear {
+                globalString.reload(date: date)
+            }
         }
         
     }// Ends Body
@@ -181,13 +90,43 @@ struct configurationView: View {
         return input
     }
     
+    func configButton(value: String, key: String) -> some View {
+        NavigationLink(value) {
+            editConfigView(date: date,
+                           buttonKey: key,
+                           foodName: stripTitleFrom(str: value),
+                           foodValue: stripProteinFrom(str: value) ?? 0,
+                           showPopup: false
+            )
+        }
+        .padding(8)
+        .frame(width: 130, height: 120, alignment: .center)
+        .font(.system(size: 18))
+        .buttonStyle(.bordered)
+        .multilineTextAlignment(.center)
+        .foregroundColor(colorForButton(at: value))
+    }
+      
+      func colorForButton(at value: String) -> Color {
+          let colors: [Color] = [.blue, .red, .green, .yellow, .orange, .purple]
+          if let index = Array(globalString.config.values.sorted()).firstIndex(of: value) {
+              return colors[index % colors.count]
+          }
+          return .gray
+      }
+    
+    func addNewConfig() {
+        let uuidKey = UUID().uuidString
+        globalString.config[uuidKey] = "*Configure me"
+    }
+    
 }// Ends Struct
 
 struct editConfigView : View {
     
     var date : String
     
-    @State var button: String
+    @State var buttonKey: String
     
     @StateObject var globalString = GlobalString()
     
@@ -215,14 +154,17 @@ struct editConfigView : View {
                     print("saving to config")
                     print(foodName)
                     print(foodValue)
-                    configHelper(globalString: globalString).saveToConfig(foodName: foodName, foodValue: foodValue, button: button)
+                    configHelper.saveToConfig(globalString: globalString, foodName: foodName, foodValue: foodValue, buttonKey: buttonKey)
                     showPopup = true
                 }
                 
                 
                 
-            }.onDisappear() {
-            }
+            }.navigationBarItems(trailing: Button(action: deleteConfig) {
+                Image(systemName: "trash")
+                    .font(.title)
+                    .foregroundColor(.red)
+            })
         }
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
@@ -244,42 +186,34 @@ struct editConfigView : View {
         
     }
     
+    func deleteConfig() {
+        globalString.config.removeValue(forKey: buttonKey)
+        print(buttonKey)
+        configHelper.storeConfig(globalString: globalString)
+    }
+    
+    
 }// ends struct
 
 struct configHelper {
     
-    @StateObject var globalString: GlobalString
-    
-    func resetToDefaultConfig() {
-
-        // Resetting buttons to their default state.
-        saveToConfig(foodName: "Cup of Milk", foodValue: 8, button: "1Button")
-        saveToConfig(foodName: "4oz Chicken Breast", foodValue: 35, button: "2Button")
-        saveToConfig(foodName: "Scoop of Whey", foodValue: 25, button: "3Button")
-        saveToConfig(foodName: "3 Eggs", foodValue: 18, button: "4Button")
-        saveToConfig(foodName: "Nonfat Greek Yogurt", foodValue: 17, button: "5Button")
-        saveToConfig(foodName: "Protein Bar", foodValue: 20, button: "6Button")
-
-    }
-    
     // Saves pair {button} : {name and value} into config.
-    func saveToConfig(foodName: String, foodValue: Int, button: String) {
-
-        let buttonText = button // Determine button we are editting.
+    static func saveToConfig(globalString: GlobalString, foodName: String, foodValue: Int, buttonKey: String) {
         
         let values = foodName + " (" + String(foodValue) + "g)"
-        let text = "{\"" + buttonText + "\":\"" + values + "\"}"
+        let text = "{\"" + buttonKey + "\":\"" + values + "\"}"
 
             if let dict = dictFromString(str: text) {
                 globalString.config = globalString.config.merging(dict){ (_, new) in new } // merges config with new values in dict.
-                storeConfig(config: globalString.config)
-            } else {
+                storeConfig(globalString: globalString)
                 print("failed dict from String")
             }
     }
     
-    // Puts dictionary config into storage
-    func storeConfig(config: Dictionary<String, String>){
+    // Puts dictionarysconfig into storage
+    static func storeConfig(globalString: GlobalString){
+        
+        let config = globalString.config
 
         let defaults = UserDefaults.standard
 
@@ -288,7 +222,7 @@ struct configHelper {
     }
     
     // Retrieve a string version of config to store.
-    func stringifyConfig(config: Dictionary<String, String>) -> String {
+    static func stringifyConfig(config: Dictionary<String, String>) -> String {
         var str = "{"
         for (key, value) in config {
             str += ("\"" + key + "\" : \"" + value + "\",")
@@ -298,17 +232,11 @@ struct configHelper {
     }
 
     // Given a string dictionary, format into usable data type.
-    func dictFromString(str: String) -> Dictionary<String, String>? {
+    static func dictFromString(str: String) -> Dictionary<String, String>? {
 
         if let data = str.data(using: .utf8) {
             return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
         }
         return nil
-    }
-}
-
-struct configurationView_Previews: PreviewProvider {
-    static var previews: some View {
-        editConfigView(date: "", button: "1Button", showPopup: false).preferredColorScheme(.dark)
     }
 }

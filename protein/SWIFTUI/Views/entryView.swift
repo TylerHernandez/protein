@@ -23,6 +23,33 @@ struct entryView: View {
         
         VStack {
             
+            let sortedKeys = globalString.config.keys.sorted {
+                globalString.config[$0]! < globalString.config[$1]!
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(Array(sortedKeys.enumerated()), id: \.offset) { index, key in
+                        if let value = globalString.config[key] {
+                            Button(value) {
+                                addQuickEntry(grams: stripProteinFrom(str: value) ?? 0)
+                                saveProteinToStorage()
+                                showPopup = true
+                                print(value)
+                            }
+                            .padding(8)
+                            .frame(width: 130, height: 120, alignment: .center)
+                            .font(.system(size: 18))
+                            .buttonStyle(.bordered)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(colorForButton(at: index))
+                        }
+                    }
+                }
+            }
+
+
+            
             Button("Remove All"){
                 for item in globalString.listOfEntries {
                     removeOldEntry(grams: item.grams)
@@ -37,93 +64,93 @@ struct entryView: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.blue)
             
-            HStack {
-                
-                Button(globalString.config["1Button"] ?? "Cup of Milk (8g)"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "Cup of Milk (8g)") ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.blue)
-                
-                Spacer()
-                
-                Button(globalString.config["2Button"] ?? "4oz Chicken Breast (35g)"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "4oz Chicken Breast (35g)") ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.red)
-                
-                
-                Spacer()
-                
-                Button(globalString.config["3Button"] ?? "Scoop of Whey (25g)"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "Scoop of Whey (25g)") ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.green)
-                
-                Spacer()
-            } // Hstack 1
-            HStack {
-                Spacer()
-                Button(globalString.config["4Button"] ?? "3 Eggs (18g)"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "3 eggs (18g)") ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.yellow)
-                
-                Spacer()
-                Button(globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)") ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.orange)
-                
-                Spacer()
-                Button(globalString.config["6Button"] ?? "Protein Bar (20g)"){
-                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "Protein Bar (20g)") ?? 0)
-                    saveProteinToStorage()
-                    showPopup = true
-                }
-                .padding(8)
-                .frame(width: 130, height: 120, alignment: .center )
-                .font(.system(size: 18))
-                .buttonStyle(.bordered)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.purple)
-                
-                Spacer()
-            } // Hstack 2
+//            HStack {
+//
+//                Button(globalString.config["1Button"] ?? "Cup of Milk (8g)"){
+//                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["1Button"] ?? "Cup of Milk (8g)") ?? 0)
+//                    saveProteinToStorage()
+//                    showPopup = true
+//                }
+//                .padding(8)
+//                .frame(width: 130, height: 120, alignment: .center )
+//                .font(.system(size: 18))
+//                .buttonStyle(.bordered)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.blue)
+//
+//                Spacer()
+//
+//                Button(globalString.config["2Button"] ?? "4oz Chicken Breast (35g)"){
+//                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["2Button"] ?? "4oz Chicken Breast (35g)") ?? 0)
+//                    saveProteinToStorage()
+//                    showPopup = true
+//                }
+//                .padding(8)
+//                .frame(width: 130, height: 120, alignment: .center )
+//                .font(.system(size: 18))
+//                .buttonStyle(.bordered)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.red)
+//
+//
+//                Spacer()
+//
+//                Button(globalString.config["3Button"] ?? "Scoop of Whey (25g)"){
+//                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["3Button"] ?? "Scoop of Whey (25g)") ?? 0)
+//                    saveProteinToStorage()
+//                    showPopup = true
+//                }
+//                .padding(8)
+//                .frame(width: 130, height: 120, alignment: .center )
+//                .font(.system(size: 18))
+//                .buttonStyle(.bordered)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.green)
+//
+//                Spacer()
+//            } // Hstack 1
+//            HStack {
+//                Spacer()
+//                Button(globalString.config["4Button"] ?? "3 Eggs (18g)"){
+//                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["4Button"] ?? "3 eggs (18g)") ?? 0)
+//                    saveProteinToStorage()
+//                    showPopup = true
+//                }
+//                .padding(8)
+//                .frame(width: 130, height: 120, alignment: .center )
+//                .font(.system(size: 18))
+//                .buttonStyle(.bordered)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.yellow)
+//
+//                Spacer()
+//                Button(globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)"){
+//                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["5Button"] ?? "Nonfat Greek Yogurt (17g)") ?? 0)
+//                    saveProteinToStorage()
+//                    showPopup = true
+//                }
+//                .padding(8)
+//                .frame(width: 130, height: 120, alignment: .center )
+//                .font(.system(size: 18))
+//                .buttonStyle(.bordered)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.orange)
+//
+//                Spacer()
+//                Button(globalString.config["6Button"] ?? "Protein Bar (20g)"){
+//                    addQuickEntry(grams: stripProteinFrom(str: globalString.config["6Button"] ?? "Protein Bar (20g)") ?? 0)
+//                    saveProteinToStorage()
+//                    showPopup = true
+//                }
+//                .padding(8)
+//                .frame(width: 130, height: 120, alignment: .center )
+//                .font(.system(size: 18))
+//                .buttonStyle(.bordered)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.purple)
+//
+//                Spacer()
+//            } // Hstack 2
             
         } // Vstack 1
             .navigationBarHidden(false)
@@ -207,6 +234,11 @@ struct entryView: View {
         } else {return 0}
         
         return Int(protein)
+    }
+    
+    func colorForButton(at index: Int) -> Color {
+        let colors: [Color] = [.blue, .red, .green, .yellow, .orange, .purple, .cyan, .pink, .mint, .teal]
+        return colors[index % colors.count]
     }
     
 }
