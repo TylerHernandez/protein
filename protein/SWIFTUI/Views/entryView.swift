@@ -35,7 +35,6 @@ struct entryView: View {
                                 addQuickEntry(grams: stripProteinFrom(str: value) ?? 0)
                                 saveProteinToStorage()
                                 showPopup = true
-                                print(value)
                             }
                             .padding(8)
                             .frame(width: 130, height: 120, alignment: .center)

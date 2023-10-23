@@ -168,7 +168,6 @@ struct editConfigView : View {
         }
         .onAppear {
             // Need to reload string with most up to date listOfEntries or it will be empty.
-            print("Refreshing config from storage")
             globalString.reload(date: date)
         }// Ends onAppear
         .popover(isPresented: $showPopup) {
@@ -188,7 +187,6 @@ struct editConfigView : View {
     
     func deleteConfig() {
         globalString.config.removeValue(forKey: buttonKey)
-        print(buttonKey)
         configHelper.storeConfig(globalString: globalString)
     }
     

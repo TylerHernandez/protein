@@ -119,9 +119,6 @@ struct homeView: View {
     
     @State private var isModifyingEntryPopoverPresented = false
     
-    @State private var isEditMode: EditMode = .inactive
-    
-    
     var body: some View {
         NavigationView {
             
@@ -174,6 +171,8 @@ struct homeView: View {
                 List {
                     ForEach(globalString.listOfEntries, id: \.id) { entry in
                         HStack {
+                            
+                            
                             Button(action: {
                                 // Modify action
                                 activeEntry = entry.grams
@@ -182,10 +181,18 @@ struct homeView: View {
                                 Image(systemName: "pencil")
                                     .foregroundColor(.blue)
                             }
+                            Divider()
+                                .background(Color.gray)
+                                .frame(height: 20) // Doesn't quite fill the cell, to keep its continuous feel.
+
 
                             Spacer()
                             Text("\(entry.grams)")
                             Spacer()
+                            Divider()
+                                .background(Color.gray)
+                                .frame(height: 20)
+                            
                             Image(systemName: "line.horizontal.3") // Hamburger icon
                                             .foregroundColor(.gray)
                         }
@@ -196,8 +203,7 @@ struct homeView: View {
                 .onAppear {
                     globalString.reload(date: date.formatted(date: .long, time: .omitted))
                 }
-                .environment(\.editMode, $isEditMode)
-                
+            
                 
                 Text("Total: \(totalSum()) grams").font(.title2)
                 
@@ -277,18 +283,6 @@ struct homeView: View {
                     }
                 }.background(BackgroundBlurView())
             }
-            
-            .navigationBarItems(trailing: Button(action: {
-                        withAnimation {
-                            if self.isEditMode == .inactive {
-                                self.isEditMode = .active
-                            } else {
-                                self.isEditMode = .inactive
-                            }
-                        }
-                    }) {
-                        Text(self.isEditMode == .inactive ? "Edit" : "Done")
-                    })
             
         }// Navigation View
         
