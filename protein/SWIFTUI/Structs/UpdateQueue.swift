@@ -27,8 +27,11 @@ struct ProteinApiQueue {
     
     var queue = [ProteinEntry]()
     
-    mutating func append(latestEntry: ProteinEntry) {
+    init () {
         queue = getQueueFromStorage()
+    }
+    
+    mutating func append(latestEntry: ProteinEntry) {
         
         // Check if an entry with the same date exists in the queue
         if let existingIndex = queue.firstIndex(where: { $0.date == latestEntry.date }) {
@@ -38,6 +41,61 @@ struct ProteinApiQueue {
         }
 
         storeQueue()
+    }
+    
+    mutating func dequeue() -> Void {
+        if (!queue.isEmpty) {
+            let entry = queue.removeFirst()
+            saveProteinRecordToApi(date: entry.date, list: entry.list, sum: entry.sum)
+            storeQueue()
+        }
+    }
+    
+    func saveProteinRecordToApi(date: String, list: String , sum: String) -> Void {
+        
+        let apiUrl = URL(string: "http://192.168.1.240:5000/api/protein") ?? URL(string: "localhost")!
+        
+        var request = URLRequest(url: apiUrl)
+        
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let requestData = ProteinEntry(date: date, list: list, sum: sum)
+        
+        do {
+            // Encode the request data to JSON
+            let jsonEncoder = JSONEncoder()
+            let requestBody = try jsonEncoder.encode(requestData)
+            request.httpBody = requestBody
+            
+            // Make the API request
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    print("Error: \(error)")
+                    return
+                }
+                
+                if let data = data {
+                    do {
+                        // Decode the response JSON data
+                        let jsonDecoder = JSONDecoder()
+                        let responseObject = try jsonDecoder.decode(ProteinApiResponse.self, from: data)
+                        print("Response: \(responseObject)")
+                        
+                        /*
+                         Response: ProteinApiResponse(message: "Protein record created or updated successfully")
+                         */
+                    } catch {
+                        print("Error decoding response: \(error)")
+                    }
+                }
+            }
+            
+            task.resume()
+            
+        } catch {
+            print("Error encoding request data: \(error)")
+        }
     }
     
     private func storeQueue() {

@@ -70,8 +70,11 @@ class GlobalString: ObservableObject {
             
             let fromStorageList = toList(str: storedList)
             
-            saveProteinRecordToApi(date: date, list: storedList, sum: String(totalSum(list: fromStorageList)))
-            
+            pingApi { apiIsAvailable in
+                print("API IS AVAILABLE! UNLOAD OUR QUEUE")
+                var q = ProteinApiQueue()
+                q.dequeue()
+            }
             return fromStorageList
         }
         return []
@@ -116,48 +119,35 @@ class GlobalString: ObservableObject {
         return newList
     }
     
-    func saveProteinRecordToApi(date: String, list: String , sum: String) -> Void {
-        print("saving to api")
-        
-        let apiUrl = URL(string: "")!
-        
+    func pingApi(completion: @escaping (Bool) -> Void) {
+        var apiIsAvailable = false
+        let apiUrl = URL(string: "http://192.168.1.240:5000/api/protein/ping") ?? URL(string: "localhost")!
         var request = URLRequest(url: apiUrl)
-        
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let requestData = ProteinEntry(date: date, list: list, sum: sum)
-        
-        do {
-            // Encode the request data to JSON
-            let jsonEncoder = JSONEncoder()
-            let requestBody = try jsonEncoder.encode(requestData)
-            request.httpBody = requestBody
-            
-            // Make the API request
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if let error = error {
-                    print("Error: \(error)")
-                    return
-                }
-                
-                if let data = data {
-                    do {
-                        // Decode the response JSON data
-                        let jsonDecoder = JSONDecoder()
-                        let responseObject = try jsonDecoder.decode(ProteinApiResponse.self, from: data)
-                        print("Response: \(responseObject)")
-                    } catch {
-                        print("Error decoding response: \(error)")
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error)")
+                completion(apiIsAvailable)
+                return
+            }
+
+            if let data = data {
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let responseObject = try jsonDecoder.decode(ProteinApiResponse.self, from: data)
+                    if responseObject.message == "pong" {
+                        apiIsAvailable = true
                     }
+                    completion(apiIsAvailable)
+                } catch {
+                    print("Error decoding response data: \(error)")
+                    completion(apiIsAvailable)
                 }
             }
-            
-            task.resume()
-            
-        } catch {
-            print("Error encoding request data: \(error)")
         }
+
+        task.resume()
     }
     
     func totalSum(list: [Entry] ) -> Int {
