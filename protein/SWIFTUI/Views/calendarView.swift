@@ -17,6 +17,9 @@ extension DateComponents: Comparable {
 }
 
 struct datePicker: View {
+    
+    @StateObject var globalString : GlobalString
+    
     @Environment(\.calendar) var calendar
     @Environment(\.timeZone) var timeZone
     
@@ -43,8 +46,14 @@ struct datePicker: View {
     var body: some View {
         VStack{
             
-            Button("Trends") {
-                showPopup = true
+            HStack(spacing: 20) {
+                
+                Button("See Trends") {
+                    showPopup = true
+                }
+                
+                NavigationLink("Import/Export", destination: importExportView())
+                
             }
             
             MultiDatePicker("Dates Available", selection: $dates, in: bounds)
@@ -53,7 +62,7 @@ struct datePicker: View {
             
             List {
                 ForEach(dates.sorted(), id: \.self) { date in
-                    
+                    // TODO: Change this mechanism for imported history to be validated.
                     let grams = loadProteinFromStorage(date: date.date ?? Date.now)
                     
                     Text("\((date.date ?? Date.now).formatted(date: .long, time: .omitted)):  \(grams) grams")
@@ -105,27 +114,41 @@ struct datePicker: View {
         return count
     }
     
+//    func loadProteinFromStorage(date: Date) -> String {
+//
+//        let defaults = UserDefaults.standard
+//
+//        let key = (date.formatted(date: .long, time: .omitted))
+//
+//        if let storedIntake = defaults.string(forKey: key) {
+//            return storedIntake
+//        } else {
+//            return "0"
+//        }
+//    }
+    
     func loadProteinFromStorage(date: Date) -> String {
-
-        let defaults = UserDefaults.standard
-
-        let key = (date.formatted(date: .long, time: .omitted))
-
-        if let storedIntake = defaults.string(forKey: key) {
-            return storedIntake
-        } else {
-            return "0"
+        let entryList = globalString.loadListFromStorage(date: (date.formatted(date: .long, time: .omitted)))
+        
+        var totalSum = 0
+        
+        for entry in entryList {
+            totalSum += entry.grams
         }
+        
+        return String(totalSum)
     }
     
 }
 
 struct calendarView: View {
+    
+    @StateObject var globalString : GlobalString
 
     var body: some View {
         VStack {
 
-            datePicker()
+            datePicker(globalString: globalString)
 
             Spacer()
             
@@ -197,10 +220,10 @@ struct showTrendView: View {
     
 }
 
-struct calendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        calendarView().preferredColorScheme(.dark)
-    }
-}
+//struct calendarView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        calendarView().preferredColorScheme(.dark)
+//    }
+//}
 
 
